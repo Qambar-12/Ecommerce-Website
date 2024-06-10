@@ -5,3 +5,6 @@ def storeHomepage(request):
     #Query all products from the Product model and store them in the products variable passed to the template.
     products = Product.objects.all()
     return render(request, 'store/storeHome.html',{'products':products})
+#The about view renders the about.html template that extends the base.html template in turn.
+def about(request):
+    return render(request, 'store/about.html')
