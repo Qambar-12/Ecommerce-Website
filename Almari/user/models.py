@@ -11,6 +11,7 @@ class UserProfile(models.Model):
     email = models.EmailField(max_length=100, unique=True)
     #stores hashed passwords
     password = models.CharField(max_length=20)
+    created_by_admin = models.BooleanField(default=False)
     def __str__(self):
         return f'Username : {self.username}'
 

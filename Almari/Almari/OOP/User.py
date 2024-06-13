@@ -32,25 +32,21 @@ class CustomerUser(AbstractUser):
         super().__init__(username, email, password)
         self.address = address
 
-    def validate_signup(self):
-        if not self.username :
-            return "Username is required."
-        if not self.email:
-            return "Email is required."
-        if not self.password:
-            return "Password is required."
-        if not self.address:
-            return "Address is required."   
-        if not self.username and not self.email and not self.password and not self.address:
+    def validate_signup(self,confirm):
+        if not self.username or not self.email or not self.password or not confirm or not self.address :
             return "All fields are required."
+        if self.password and confirm != self.password:
+            return "The passwords must match" 
+        if self.email:
+            
         if CustomerProfile.objects.filter(username=self.username).exists():
-            return "Username already exists."
+            return "Username already exists.\nPlease try another one"
         if len(self.password) < 8 or not re.search(r'[!@#$%^&*(),.?":{}|<>]', self.password):
             return "Password must be at least 8 characters long and contain a special character."
         return None
 
-    def signup(self):
-        error = self.validate_signup()
+    def signup(self,confirm):
+        error = self.validate_signup(confirm)
         if error:
             return error
         self.password = self.hash_password()
@@ -77,12 +73,19 @@ class CustomerUser(AbstractUser):
         else:
             try:
                 customer = CustomerProfile.objects.get(username=username)
-                #if self.check_password(password):
-                if self.password == customer.password:
-                    CustomerUser.logged_in = True
-                    return customer, None
+                #if the customer is created by django admin the check_password is not called because the password directly stored in database is not hashed .
+                if customer.created_by_admin:
+                    if self.password == customer.password:
+                        CustomerUser.logged_in = True
+                        return customer, None
+                    else:
+                        return None, "Invalid password"
                 else:
-                    return None, "Invalid password."
+                    if self.check_password(password):
+                        CustomerUser.logged_in = True
+                        return customer, None    
+                    else:
+                        return None, "Invalid password"
             except CustomerProfile.DoesNotExist:
                 return None, "Username does not exist."
 

@@ -5,4 +5,4 @@ class Password:
     3.Password reset functionality."""
     def encrypt_password(self):
         """Encrypts the password using random number of iterations."""
-        pass
+        

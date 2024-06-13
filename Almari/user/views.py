@@ -9,16 +9,28 @@ def customer_signup(request):
         username = request.POST['username']
         email = request.POST['email']
         password = request.POST['password']
+        confirm_password = request.POST['confirm_password']
         address = request.POST['address']
 
         customer_user = CustomerUser(username, email, password, address)
-        error = CustomerUser.signup()
+        error = customer_user.signup(confirm_password)
 
         if error:
             messages.error(request, error)
-            return render(request, 'user/customer_signup.html')
-        return redirect('storeHome')
-    return render(request, 'user/customer_signup.html')
+            request.session['form_data'] = request.POST.dict()
+            #return render(request, 'user/customer_signup.html',{
+                #'username': username,
+                #'email': email,
+                #'address': address})
+            return redirect("customer_signup")    
+        
+        else:
+            if 'form_data' in request.session:
+                del request.session['form_data']
+            return redirect('storeHome')
+    else:
+        form_data = request.session.get('form_data', {})
+        return render(request, 'user/customer_signup.html',form_data)
 
 def customer_login(request):
     if request.method == 'POST':

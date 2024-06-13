@@ -14,24 +14,40 @@
     <div class="row">
         <center>
             <div class="col-8">
-                <br/><br/>
-                <form method="POST" action ="{%url 'customer_signup'%}">
+                <br /><br />
+                <form method="POST" action="{%url 'customer_signup'%}">
                     {%csrf_token%}
                     <div class="mb-3">
-                      <input type="text" class="form-control" name = "username" placeholder="Username">
+                        <input type="text" class="form-control" name="username" placeholder="Username"
+                        value="{{ username|default_if_none:'' }}">
+                        <br/>  
                     </div>
                     <div class="mb-3">
-                      <input type="password" class="form-control" name = "password" placeholder="Password">
-                    </div>
-                    <br/><br/>
-                    <button type="submit" class="btn btn-secondary">Register</button>
+                        <input type="password" class="form-control" name="password" placeholder="Password"
+                        value="{{ password|default_if_none:'' }}">
+                        <br />
+                        <div class="mb-3">
+                            <input type="password" class="form-control" name="confirm_password"
+                                placeholder="Confirm Password">
+                            <br />
+                            <div class="mb-3">
+                                <input type="email" class="form-control" name="email" placeholder="Email" 
+                                value="{{ email|default_if_none:'' }}">
+                                <br />
+                                <div class="mb-3">
+                                    <input type="text" class="form-control" name="address" placeholder="Address"
+                                    value="{{ address|default_if_none:'' }}">
+                                    <br />
+                                </div>
+                                <br /><br />
+                                <button type="submit" class="btn btn-secondary">Register</button>
                 </form>
-                
 
-<br/><br/>
-<br/><br/>
-<br/><br/>
-<br/><br/>
+
+                <br /><br />
+                <br /><br />
+                <br /><br />
+                <br /><br />
             </div>
         </center>
     </div>
