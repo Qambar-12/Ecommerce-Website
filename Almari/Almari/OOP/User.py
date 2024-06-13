@@ -2,7 +2,7 @@ import re
 from abc import ABC, abstractmethod
 #for password hashing
 from django.contrib.auth.hashers import make_password, check_password
-from user.models import CustomerProfile, AdminProfile
+from user.models import CustomerProfile, AdminProfile,User
 
 #Abstract class for user and its subclasses CustomerUser and AdminUser to implement abstract methods login and signup.
 #Inheritance feature used
@@ -38,7 +38,7 @@ class CustomerUser(AbstractUser):
         if self.password and confirm != self.password:
             return "The passwords must match" 
         if self.email:
-            
+            pass
         if CustomerProfile.objects.filter(username=self.username).exists():
             return "Username already exists.\nPlease try another one"
         if len(self.password) < 8 or not re.search(r'[!@#$%^&*(),.?":{}|<>]', self.password):
@@ -50,9 +50,13 @@ class CustomerUser(AbstractUser):
         if error:
             return error
         self.password = self.hash_password()
-        #filing in database
+        #filing in respective database tables namely django's own table for Users and created table customer profiles 
+        #if user table is not populated correctly it will raise error because they are linked togther in model.py
         customer = CustomerProfile(username=self.username, email=self.email, password=self.password, address=self.address)
         customer.save()
+        user = User(username=self.username, email=self.email)
+        user.password = make_password(self.password)
+        user.save()
         return None
     
     def validate_login(self):
