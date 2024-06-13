@@ -30,7 +30,8 @@ def customer_signup(request):
             return redirect('storeHome')
     else:
         form_data = request.session.get('form_data', {})
-        return render(request, 'user/customer_signup.html',form_data)
+        # return render(request, 'user/customer_signup.html',form_data)
+        return render(request, 'user/customer_signup.html', {'form_data': form_data, 'request': request})
 
 def customer_login(request):
     if request.method == 'POST':
@@ -43,6 +44,7 @@ def customer_login(request):
         if customer:
             # Log in the customer
             #login(request, customer)
+            request.session['logged_in'] = True
             messages.success(request, 'You have been logged in')
             return redirect('storeHome')  
         else:
@@ -50,6 +52,10 @@ def customer_login(request):
             return render(request, 'user/customer_login.html')
     return render(request, 'user/customer_login.html')
 
+def customer_logout(request):
+    logout(request)
+    messages.success(request, 'You have been logged out')
+    return redirect('storeHome')
 """def admin_signup(request):
     if request.method == 'POST':
         username = request.POST['username']
@@ -85,7 +91,3 @@ def admin_login(request):
     return render(request, 'login.html')
 """
 
-def customer_logout(request):
-    logout(request)
-    messages.success(request, 'You have been logged out')
-    return redirect('storeHome')

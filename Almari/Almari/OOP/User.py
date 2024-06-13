@@ -3,6 +3,7 @@ from abc import ABC, abstractmethod
 #for password hashing
 from django.contrib.auth.hashers import make_password, check_password
 from user.models import CustomerProfile, AdminProfile
+from django.contrib.auth.models import User
 
 #Abstract class for user and its subclasses CustomerUser and AdminUser to implement abstract methods login and signup.
 #Inheritance feature used
@@ -38,6 +39,7 @@ class CustomerUser(AbstractUser):
         if self.password and confirm != self.password:
             return "The passwords must match" 
         if self.email:
+            return None
             
         if CustomerProfile.objects.filter(username=self.username).exists():
             return "Username already exists.\nPlease try another one"
@@ -50,8 +52,10 @@ class CustomerUser(AbstractUser):
         if error:
             return error
         self.password = self.hash_password()
+        user = User.objects.create_user(username=self.username, email=self.email, password=self.password)
+        user.save()
         #filing in database
-        customer = CustomerProfile(username=self.username, email=self.email, password=self.password, address=self.address)
+        customer = CustomerProfile(user=user,username=self.username, email=self.email, password=self.password, address=self.address)
         customer.save()
         return None
     
@@ -81,7 +85,7 @@ class CustomerUser(AbstractUser):
                     else:
                         return None, "Invalid password"
                 else:
-                    if self.check_password(password):
+                    if check_password(password, customer.password):
                         CustomerUser.logged_in = True
                         return customer, None    
                     else:
