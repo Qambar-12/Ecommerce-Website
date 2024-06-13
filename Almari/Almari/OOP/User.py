@@ -52,11 +52,11 @@ class CustomerUser(AbstractUser):
         self.password = self.hash_password()
         #filing in respective database tables namely django's own table for Users and created table customer profiles 
         #if user table is not populated correctly it will raise error because they are linked togther in model.py
-        customer = CustomerProfile(username=self.username, email=self.email, password=self.password, address=self.address)
-        customer.save()
         user = User(username=self.username, email=self.email)
         user.password = make_password(self.password)
         user.save()
+        customer = CustomerProfile(username=self.username, email=self.email, password=self.password, address=self.address)
+        customer.save()
         return None
     
     def validate_login(self):
