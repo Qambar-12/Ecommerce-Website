@@ -1,5 +1,7 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
+#To reference or reverse these admin URLs programmatically, you typically use the built-in view names provided by the admin interface.
+from django.urls import reverse
 from django.contrib import messages
 from Almari.OOP.User import CustomerUser
 # Create your views here.
@@ -44,6 +46,7 @@ def customer_login(request):
         if customer:
             # Log in the customer
             #login(request, customer)
+            #so the navbar can show the logout button and hide the login and signup buttons
             request.session['logged_in'] = True
             messages.success(request, 'You have been logged in')
             return redirect('storeHome')  
@@ -56,6 +59,10 @@ def customer_logout(request):
     logout(request)
     messages.success(request, 'You have been logged out')
     return redirect('storeHome')
+
+def admin_login(request):
+    admin_login_url = reverse('admin:login')
+    return redirect(admin_login_url)
 """def admin_signup(request):
     if request.method == 'POST':
         username = request.POST['username']

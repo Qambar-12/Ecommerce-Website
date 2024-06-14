@@ -1,10 +1,11 @@
+#for regular expressions
 import re
 from abc import ABC, abstractmethod
 #for password hashing
 from django.contrib.auth.hashers import make_password, check_password
-from user.models import CustomerProfile, AdminProfile
+from user.models import CustomerProfile, SellerProfile
 from django.contrib.auth.models import User
-
+from Almari.OOP import Password
 #Abstract class for user and its subclasses CustomerUser and AdminUser to implement abstract methods login and signup.
 #Inheritance feature used
 class AbstractUser(ABC):
@@ -28,6 +29,7 @@ class AbstractUser(ABC):
         return check_password(password, self.password)
 
 class CustomerUser(AbstractUser):
+    #class variable to keep track of whether the customer is logged in or not
     logged_in = False
     def __init__(self, username, email, password, address):
         super().__init__(username, email, password)
@@ -51,10 +53,12 @@ class CustomerUser(AbstractUser):
         error = self.validate_signup(confirm)
         if error:
             return error
+        #encrypted_password = self.encrypt_password_signup(self.password,self.username,"customer")
+        #self.password = (encrypted_password,self.username,"customer")
         self.password = self.hash_password()
         user = User.objects.create_user(username=self.username, email=self.email, password=self.password)
         user.save()
-        #filing in database
+        #filing in database in both tables because of one to one relationship between User and CustomerProfile
         customer = CustomerProfile(user=user,username=self.username, email=self.email, password=self.password, address=self.address)
         customer.save()
         return None
@@ -85,6 +89,7 @@ class CustomerUser(AbstractUser):
                     else:
                         return None, "Invalid password"
                 else:
+                    #encrypted_password = self.encrypt_password_login(password, username, "customer")
                     if check_password(password, customer.password):
                         CustomerUser.logged_in = True
                         return customer, None    
