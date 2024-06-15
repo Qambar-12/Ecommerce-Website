@@ -1,0 +1,66 @@
+{% extends 'store/base.html' %}
+
+{% block title %}{{ product.name }}{% endblock %}
+
+{% block breadcrumbs %}
+<nav aria-label="breadcrumb" class="bg-light py-3 mb-4">
+    <div class="container">
+        <ol class="breadcrumb mb-0">
+            <li class="breadcrumb-item"><a href="{% url 'storeHome' %}">Home</a></li>
+            <li class="breadcrumb-item"><a href="{% url 'category_detail' product.category.id %}">{{ product.category.name }}</a></li>
+            <li class="breadcrumb-item active" aria-current="page">{{ product.name }}</li>
+        </ol>
+    </div>
+</nav>
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <section class="py-5">
+        <div class="row gx-4 gx-lg-5 align-items-center">
+            <div class="col-md-6">
+                <img class="img-fluid mb-5 mb-md-0" src="{{ product.image.url }}" alt="{{ product.name }}">
+            </div>
+            <div class="col-md-6">
+                <h1 class="display-5 fw-bolder">{{ product.name }}</h1>
+                <div class="fs-5 mb-5">
+                    <span class="text-decoration-line-through text-muted">$1200.00</span>
+                    <span>${{ product.price }}</span>
+                </div>
+                <p class="lead">{{ product.description }}</p>
+                <p class="text-muted">Available Quantity: {{ product.stock_quantity }}</p>
+                <div class="d-flex mb-4">
+                    <input class="form-control text-center me-3" id="inputQuantity" type="number" value="1" min="1" max="{{ product.stock_quantity }}" style="max-width: 3rem;">
+                    <button class="btn btn-outline-dark flex-shrink-0" type="button">
+                        <i class="fas fa-cart-plus me-1"></i>
+                        Add to cart
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <hr class="my-5">
+
+        <div class="row">
+            <div class="col-12">
+                <h3>Related Products</h3>
+                <div class="row">
+                    {% for related_product in related_products %}
+                    <div class="col-md-3 col-sm-6 mb-4">
+                        <div class="card h-100">
+                            <a href="{% url 'product_detail' related_product.id %}">
+                                <img class="card-img-top" src="{{ related_product.image.url }}" alt="{{ related_product.name }}">
+                            </a>
+                            <div class="card-body text-center">
+                                <h5 class="card-title">{{ related_product.name }}</h5>
+                                <p class="card-text">${{ related_product.price }}</p>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+{% endblock %}
