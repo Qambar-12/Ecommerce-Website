@@ -9,7 +9,7 @@ class UserProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     #unique=True specifies that the username and email fields must be unique.
     username = models.CharField(max_length=100, unique=True)
-    email = models.EmailField(max_length=100, unique=True)
+    email = models.EmailField(max_length=100, unique=False)
     #stores hashed passwords
     password = models.CharField(max_length=20)
     created_by_admin = models.BooleanField(default=False)

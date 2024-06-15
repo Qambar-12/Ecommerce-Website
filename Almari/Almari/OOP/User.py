@@ -3,12 +3,14 @@ import re
 from abc import ABC, abstractmethod
 #for password hashing
 from django.contrib.auth.hashers import make_password, check_password
+from django.db.utils import IntegrityError
+#from django.db.utils import ValueError
 from user.models import CustomerProfile, SellerProfile
 from django.contrib.auth.models import User
-from Almari.OOP import Password
+from Almari.OOP.Password import Password, CommonMeta
 #Abstract class for user and its subclasses CustomerUser and AdminUser to implement abstract methods login and signup.
 #Inheritance feature used
-class AbstractUser(ABC):
+class AbstractUser(Password, ABC ,metaclass=CommonMeta):
     def __init__(self, username, email, password):
         self.username = username
         self.email = email
@@ -36,25 +38,47 @@ class CustomerUser(AbstractUser):
         self.address = address
 
     def validate_signup(self,confirm):
-        if not self.username or not self.email or not self.password or not confirm or not self.address :
-            return "All fields are required."
-        if self.password and confirm != self.password:
-            return "The passwords must match" 
-        if self.email:
-            return None
+        # if not self.username or not self.email or not self.password or not confirm or not self.address :
+        #     return "All fields are required."
+        # else:
+        #     if CustomerProfile.objects.filter(username=self.username).exists():
+        #         return "Username already exists.\nPlease try another one"
+        #     elif len(self.password) < 8 or not re.search(r'[!@#$%^&*(),.?":{}|<>]', self.password):
+        #         return "Password must be at least 8 characters long and contain a special character."
+        #     elif self.password and confirm != self.password:
+        #         return "The passwords must match" 
+        #     elif not re.search(self.email, r'^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$'):
+        #         return "Invalid email address"
+        # return None
+        #try except block to handle possible exceptions
+        try:
+            if not self.username or not self.email or not self.password or not confirm or not self.address:
+                raise ValueError("All fields are required.")
             
-        if CustomerProfile.objects.filter(username=self.username).exists():
-            return "Username already exists.\nPlease try another one"
-        if len(self.password) < 8 or not re.search(r'[!@#$%^&*(),.?":{}|<>]', self.password):
-            return "Password must be at least 8 characters long and contain a special character."
-        return None
+            if CustomerProfile.objects.filter(username=self.username).exists():
+                raise IntegrityError("Username already exists.\nPlease try another one.")
+            
+            if len(self.password) < 8 or not re.search(r'[!@#$%^&*(),.?":{}|<>]', self.password):
+                raise ValueError("Password must be at least 8 characters long and contain a special character.")
+            
+            if self.password and confirm != self.password:
+                raise ValueError("The passwords must match.")
+            
+            if not re.search(r'^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$', self.email):
+                raise ValueError("Invalid email address.")
+            
+        except (ValueError, IntegrityError) as e:
+            return str(e)
+
+        return None    
 
     def signup(self,confirm):
         error = self.validate_signup(confirm)
         if error:
             return error
-        #encrypted_password = self.encrypt_password_signup(self.password,self.username,"customer")
-        #self.password = (encrypted_password,self.username,"customer")
+        #encrypting the password before hashing it
+        encrypted_password = self.encrypt_password_signup(self.password,self.username,"customer")
+        self.password = encrypted_password
         self.password = self.hash_password()
         user = User.objects.create_user(username=self.username, email=self.email, password=self.password)
         user.save()
@@ -89,8 +113,8 @@ class CustomerUser(AbstractUser):
                     else:
                         return None, "Invalid password"
                 else:
-                    #encrypted_password = self.encrypt_password_login(password, username, "customer")
-                    if check_password(password, customer.password):
+                    encrypted_password = self.encrypt_password_login(password, username, "customer")
+                    if check_password(encrypted_password, customer.password):
                         CustomerUser.logged_in = True
                         return customer, None    
                     else:

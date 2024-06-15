@@ -18,10 +18,12 @@
                 <form method="POST" action ="{%url 'customer_login'%}">
                     {%csrf_token%}
                     <div class="mb-3">
-                      <input type="text" class="form-control" name = "username" placeholder="Username">
+                      <input type="text" class="form-control" name = "username" placeholder="Username" 
+                        value="{{ username|default_if_none:'' }}">
                     </div>
                     <div class="mb-3">
-                      <input type="password" class="form-control" name = "password" placeholder="Password">
+                      <input type="password" class="form-control" name = "password" placeholder="Password"
+                      value="{{ password|default_if_none:'' }}">
                     </div>
                     <br/><br/>
                     <button type="submit" class="btn btn-secondary">Login</button>

@@ -1,4 +1,8 @@
-class Password:
+from abc import ABCMeta
+#uisng metaclass to create a common meta class for all classes that AbstractUser inherits from in the OOP module
+class CommonMeta(ABCMeta,type):
+    pass
+class Password(metaclass=CommonMeta):
     """This class is used as mixin that is inherited by user classes to provide password related functionality.:
     1.Encrypt password which then hashed by django's make_password function to increase security.
     2.Password strength indicator.
@@ -26,7 +30,7 @@ class Password:
             increment_val.append(iteration_increments)
         
         # Save the 2D list in a file named after the username in appropriate directory
-        with open(f"encryption_keys/{role}/{username}.txt", "w") as key_file:
+        with open(f"Almari/OOP/encryption_keys/{role}/{username}.txt", "w") as key_file:
             key_file.write(str(increment_val))
         
         return encrypted
@@ -40,12 +44,12 @@ class Password:
             new_encrypted = ''
             for i, ch in enumerate(encrypted):
                 # The ASCII value of each character in the password is decremented by the corresponding number in the key
-                new_encrypted += chr(ord(ch) - iteration_increments[i])
+                new_encrypted += chr(ord(ch) + iteration_increments[i])
             encrypted = new_encrypted
         return encrypted
     @staticmethod
     def read_encryption_key(username,role):
         """Reads the encryption key from the file."""
-        with open(f"encryption_keys/{role}/{username}.txt", "r") as key_file:
+        with open(f"Almari/OOP/encryption_keys/{role}/{username}.txt", "r") as key_file:
             return eval(key_file.read())
         
