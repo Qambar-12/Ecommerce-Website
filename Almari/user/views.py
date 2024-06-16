@@ -102,7 +102,9 @@ def customer_login(request):
         form_data = request.session.get('form_data', {})
         return render(request, 'user/customer_login.html', {'form_data': form_data, 'captcha_image': captcha_image,'request': request})
 def customer_logout(request):
-    pass
+    logout(request)
+    messages.success(request, 'You have been logged out')
+    return redirect('storeHome')
 def admin_login(request):
     admin_login_url = reverse('admin:login')
     return redirect(admin_login_url)
