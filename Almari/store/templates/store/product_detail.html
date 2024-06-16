@@ -40,26 +40,29 @@
 
         <hr class="my-5">
 
-        <div class="row">
-            <div class="col-12">
-                <h3>Related Products</h3>
-                <div class="row">
-                    {% for related_product in related_products %}
-                    <div class="col-md-3 col-sm-6 mb-4">
-                        <div class="card h-100">
-                            <a href="{% url 'product_detail' related_product.id %}">
-                                <img class="card-img-top" src="{{ related_product.image_url }}" alt="{{ related_product.name }}">
-                            </a>
-                            <div class="card-body text-center">
-                                <h5 class="card-title">{{ related_product.name }}</h5>
-                                <p class="card-text">${{ related_product.price }}</p>
+        <!-- Related Products Section -->
+    <div class="row mt-5">
+        <h3 class="text-center mb-4">Related Products</h3>
+        <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
+            {% for related_product in related_products %}
+                <div class="col mb-5">
+                    <div class="card h-100">
+                        <img class="card-img-top" src="{{ related_product.image_url }}" alt="{{ related_product.name }}">
+                        <div class="card-body p-4">
+                            <div class="text-center">
+                                <h5 class="fw-bolder">{{ related_product.name }}</h5>
+                                <p>${{ related_product.price }}</p>
+                            </div>
+                        </div>
+                        <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
+                            <div class="text-center">
+                                <a class="btn btn-outline-dark mt-auto" href="{% url 'product_detail' related_product.id %}">View Details</a>
                             </div>
                         </div>
                     </div>
-                    {% endfor %}
                 </div>
-            </div>
+            {% endfor %}
         </div>
-    </section>
+    </div>
 </div>
 {% endblock %}

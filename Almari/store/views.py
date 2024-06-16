@@ -58,14 +58,7 @@ def product_detail(request, product_id):
                       product_model.description, product_model.image.url, category)
     product.id = product_model.id
 
-    related_product_models = ProductModel.objects.filter(category=category_model).exclude(id=product_id)[:4]
-    related_products = []
-    for related_product_model in related_product_models:
-        related_product = Product(related_product_model.name, related_product_model.price, 
-                                  related_product_model.stock_quantity, related_product_model.description,
-                                  related_product_model.image.url, category)
-        related_product.id = related_product_model.id
-        related_products.append(related_product)
+    related_products = product.get_related_products()
 
     return render(request, 'store/product_detail.html', {'product': product, 'related_products': related_products})
 

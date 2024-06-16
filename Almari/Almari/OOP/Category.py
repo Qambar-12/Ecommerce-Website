@@ -34,6 +34,20 @@ class Product:
             Q(name__icontains=query) | Q(description__icontains=query)
         )
         return products
+    
+    def get_related_products(self):
+        # Fetch related products from the same category, excluding this product
+        related_product_models = ProductModel.objects.filter(category=self.category.model_instance).exclude(id=self.id)[:4]
+        related_products = []
+        for related_product_model in related_product_models:
+            related_product = Product(
+                related_product_model.name, related_product_model.price,
+                related_product_model.stock_quantity, related_product_model.description,
+                related_product_model.image.url, self.category
+            )
+            related_product.id = related_product_model.id
+            related_products.append(related_product)
+        return related_products
 
 class Category:
     def __init__(self, name, image_url):
