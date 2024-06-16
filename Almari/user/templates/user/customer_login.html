@@ -25,11 +25,8 @@
                       <input type="password" class="form-control" name = "password" placeholder="Password"
                       value="{{ password|default_if_none:'' }}">
                     </div>
-                    </div>
                     <div class="mb-3">
                         <input type="text" class="form-control" name="captcha" placeholder="Captcha">
-                    </div>
-                    <div class="mb-3">
                         <img src="data:image/jpeg;base64,{{ captcha_image }}" alt="CAPTCHA">
                     </div>
                     <br/><br/>
