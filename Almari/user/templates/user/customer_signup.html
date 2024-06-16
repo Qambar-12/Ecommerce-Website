@@ -39,6 +39,11 @@
                                     value="{{ address|default_if_none:'' }}">
                                     <br />
                                 </div>
+                                <div class="mb-3">
+                                    <input type="text" class="form-control" name="captcha" placeholder="Captcha">
+                                    <img src="data:image/jpeg;base64,{{ captcha_image }}" alt="Captcha">
+                                    <br />    
+                                </div>
                                 <br /><br />
                                 <button type="submit" class="btn btn-secondary">Register</button>
                 </form>
