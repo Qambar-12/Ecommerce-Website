@@ -31,7 +31,8 @@ class Product:
     def search(cls, query):
         # Perform a search query on the Product model
         products = ProductModel.objects.filter(
-            Q(name__icontains=query) | Q(description__icontains=query)
+            Q(name__icontains=query)
+            #   | Q(description__icontains=query)
         )
         return products
     

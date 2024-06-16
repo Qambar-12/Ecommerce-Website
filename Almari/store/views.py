@@ -63,7 +63,7 @@ def product_detail(request, product_id):
     return render(request, 'store/product_detail.html', {'product': product, 'related_products': related_products})
 
 def search(request):
-    query = request.GET.get('q')
+    query = request.GET.get('q', '').strip()
     if query:
         # Perform a search for products matching the query
         products = Product.search(query)
