@@ -1,3 +1,4 @@
+#models.py
 from django.db import models
 
 # Create your models here.
@@ -9,6 +10,7 @@ class Category(models.Model):
     Represents a category table  in the e-commerce store database.
     """
     name = models.CharField(max_length=100)
+    image_url = models.ImageField(upload_to='uploads/categories/', default='uploads/categories/default.jpg')
     #string representation of the object returned by the __str__ method when querying the Category model.
     def __str__(self):
         return self.name

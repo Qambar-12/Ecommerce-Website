@@ -10,6 +10,28 @@
                 </div>
             </div>
         </header>
+        <!-- Categories Section -->
+        <section class="py-5">
+            <div class="container px-4 px-lg-5 mt-5">
+                <h2 class="text-center mb-4">Categories</h2>
+                <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
+                    {% for category in categories %}
+                        <div class="col mb-5">
+                            <a href="{% url 'category_detail' category.model_instance.id %}">
+                                <div class="card h-100">
+                                    <img class="card-img-top" src="{{ category.image_url }}" alt="{{ category.name }}" />
+                                    <div class="card-body p-4">
+                                        <div class="text-center">
+                                            <h5 class="fw-bolder">{{ category.name }}</h5>
+                                        </div>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </section>
         <!-- Section-->
         <section class="py-5">
             <div class="container px-4 px-lg-5 mt-5">
