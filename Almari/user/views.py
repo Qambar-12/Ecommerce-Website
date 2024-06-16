@@ -14,53 +14,93 @@ def customer_signup(request):
         password = request.POST['password']
         confirm_password = request.POST['confirm_password']
         address = request.POST['address']
-        #captcha = request.POST['captcha']
-        
-        customer_user = CustomerUser(username, email, password, address)
-        error = customer_user.signup(confirm_password)
+        captcha = request.POST['captcha']
+        if captcha:
+            if captcha == request.session.get('captcha', ''):
+                
+                customer_user = CustomerUser(username, email, password, address)
+                error = customer_user.signup(confirm_password)
 
-        if error:
-            messages.error(request, error)
-            request.session['form_data'] = request.POST.dict()
-            #so that the form data is not lost when the page is reloaded
-            return render(request, 'user/customer_signup.html',{
+                if error:
+                    messages.error(request, error)
+                    request.session['form_data'] = request.POST.dict()
+                    #so that the form data is not lost when the page is reloaded
+                    return render(request, 'user/customer_signup.html',{
+                        'username': username,
+                        'email': email,
+                        'address': address})
+                
+                else:
+                    if 'form_data' in request.session:
+                        del request.session['form_data']
+                    request.session['logged_in'] = True    
+                    messages.success(request, 'You have signed up successfully')    
+                    return redirect('storeHome')
+            else:
+                messages.error(request, 'Invalid CAPTCHA')
+                # Regenerate CAPTCHA if form is not valid
+                captcha_image, captcha_str = generate_image_captcha()
+                request.session['captcha'] = captcha_str
+                return render(request, 'user/customer_signup.html', {
+                    'username': username,
+                    'email': email,
+                    'password': password,
+                    'captcha_image': captcha_image})    
+        else:
+            messages.error(request, 'All fields are required.')
+            # Regenerate CAPTCHA if form is not valid
+            captcha_image, captcha_str = generate_image_captcha()
+            request.session['captcha'] = captcha_str
+            return render(request, 'user/customer_signup.html', {
                 'username': username,
                 'email': email,
-                'address': address})
-        
-        else:
-            if 'form_data' in request.session:
-                del request.session['form_data']
-            request.session['logged_in'] = True    
-            messages.success(request, 'You have signed up successfully')    
-            return redirect('storeHome')
+                'password': password,
+                'captcha_image': captcha_image})    
     else:
+        #initially the captcha is generated and stored in the session
+        captcha_image, captcha_str = generate_image_captcha()
+        request.session['captcha'] = captcha_str
         form_data = request.session.get('form_data', {})
-        return render(request, 'user/customer_signup.html', {'form_data': form_data, 'request': request})
+        return render(request, 'user/customer_signup.html', {'form_data': form_data, 'captcha_image': captcha_image,'request': request})
 
 def customer_login(request):
     if request.method == 'POST':
         username = request.POST['username']
         password = request.POST['password']
-        #captcha = request.POST['captcha']
-        
-        customer_user = CustomerUser(username, '', password, '')
-        customer, error = customer_user.login(username, password)
-
-        if customer:
-            # Log in the customer
-            #login(request, customer)
-            #so the navbar can show the logout button and hide the login and signup buttons
-            request.session['logged_in'] = True
-            messages.success(request, 'You have been logged in')
-            return redirect('storeHome')  
+        captcha = request.POST['captcha']
+        if captcha:
+            if captcha == request.session.get('captcha', ''):
+                customer_user = CustomerUser(username, '', password, '')
+                customer, error = customer_user.login(username, password)
+                if customer:
+                    # Log in the customer
+                    #login(request, customer)
+                    #so the navbar can show the logout button and hide the login and signup buttons
+                    request.session['logged_in'] = True
+                    messages.success(request, 'You have been logged in')
+                    return redirect('storeHome')  
+                else:
+                    request.session['form_data'] = request.POST.dict()
+                    messages.error(request, error)
+                    return render(request, 'user/customer_login.html', {'username': username, 'password': password})
+            else:
+                messages.error(request, 'Invalid CAPTCHA')
+                # Regenerate CAPTCHA if form is not valid
+                captcha_image, captcha_str = generate_image_captcha()
+                request.session['captcha'] = captcha_str
+                return render(request, 'user/customer_login.html', {'username': username, 'password': password, 'captcha_image': captcha_image})
         else:
-            request.session['form_data'] = request.POST.dict()
-            messages.error(request, error)
-            return render(request, 'user/customer_login.html', {'username': username, 'password': password})
+            messages.error(request, 'All fields are required.')
+            # Regenerate CAPTCHA if form is not valid
+            captcha_image, captcha_str = generate_image_captcha()
+            request.session['captcha'] = captcha_str
+            return render(request, 'user/customer_login.html', {'username': username, 'password': password, 'captcha_image': captcha_image})    
     else:
+        #initially the captcha is generated and stored in the session
+        captcha_image, captcha_str = generate_image_captcha()
+        request.session['captcha'] = captcha_str
         form_data = request.session.get('form_data', {})
-        return render(request, 'user/customer_login.html', {'form_data': form_data, 'request': request})
+        return render(request, 'user/customer_login.html', {'form_data': form_data, 'captcha_image': captcha_image,'request': request})
 
 def customer_logout(request):
     logout(request)

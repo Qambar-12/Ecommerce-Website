@@ -38,18 +38,6 @@ class CustomerUser(AbstractUser):
         self.address = address
 
     def validate_signup(self,confirm):
-        # if not self.username or not self.email or not self.password or not confirm or not self.address :
-        #     return "All fields are required."
-        # else:
-        #     if CustomerProfile.objects.filter(username=self.username).exists():
-        #         return "Username already exists.\nPlease try another one"
-        #     elif len(self.password) < 8 or not re.search(r'[!@#$%^&*(),.?":{}|<>]', self.password):
-        #         return "Password must be at least 8 characters long and contain a special character."
-        #     elif self.password and confirm != self.password:
-        #         return "The passwords must match" 
-        #     elif not re.search(self.email, r'^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$'):
-        #         return "Invalid email address"
-        # return None
         #try except block to handle possible exceptions
         try:
             if not self.username or not self.email or not self.password or not confirm or not self.address:
