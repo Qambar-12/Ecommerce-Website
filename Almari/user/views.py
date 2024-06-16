@@ -7,65 +7,6 @@ from .captcha import generate_image_captcha
 from Almari.OOP.User import CustomerUser
 # Create your views here.
 #Posting the data from the form to the server and saving it in the database if data is valid.
-def customer_signup(request):
-    if request.method == 'POST':
-        username = request.POST['username']
-        email = request.POST['email']
-        password = request.POST['password']
-        confirm_password = request.POST['confirm_password']
-        address = request.POST['address']
-        #captcha = request.POST['captcha']
-        
-        customer_user = CustomerUser(username, email, password, address)
-        error = customer_user.signup(confirm_password)
-
-        if error:
-            messages.error(request, error)
-            request.session['form_data'] = request.POST.dict()
-            #so that the form data is not lost when the page is reloaded
-            return render(request, 'user/customer_signup.html',{
-                'username': username,
-                'email': email,
-                'address': address})
-        
-        else:
-            if 'form_data' in request.session:
-                del request.session['form_data']
-            request.session['logged_in'] = True    
-            messages.success(request, 'You have signed up successfully')    
-            return redirect('storeHome')
-    else:
-        form_data = request.session.get('form_data', {})
-        return render(request, 'user/customer_signup.html', {'form_data': form_data, 'request': request})
-
-def customer_login(request):
-    if request.method == 'POST':
-        username = request.POST['username']
-        password = request.POST['password']
-        #captcha = request.POST['captcha']
-        
-        customer_user = CustomerUser(username, '', password, '')
-        customer, error = customer_user.login(username, password)
-
-        if customer:
-            # Log in the customer
-            #login(request, customer)
-            #so the navbar can show the logout button and hide the login and signup buttons
-            request.session['logged_in'] = True
-            messages.success(request, 'You have been logged in')
-            return redirect('storeHome')  
-        else:
-            request.session['form_data'] = request.POST.dict()
-            messages.error(request, error)
-            return render(request, 'user/customer_login.html', {'username': username, 'password': password})
-    else:
-        form_data = request.session.get('form_data', {})
-        return render(request, 'user/customer_login.html', {'form_data': form_data, 'request': request})
-
-def customer_logout(request):
-    logout(request)
-    messages.success(request, 'You have been logged out')
-    return redirect('storeHome')
 
 def admin_login(request):
     admin_login_url = reverse('admin:login')
