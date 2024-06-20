@@ -27,42 +27,50 @@
                     <span>${{ product.price }}</span>
                 </div>
                 <p class="lead">{{ product.description }}</p>
-                <p class="text-muted">Available Quantity: {{ product.stock_quantity }}</p>
-                <div class="d-flex mb-4">
-                    <input class="form-control text-center me-3" id="inputQuantity" type="number" value="1" min="1" max="{{ product.stock_quantity }}" style="max-width: 3rem;">
-                    <button class="btn btn-outline-dark flex-shrink-0" type="button">
-                        <i class="fas fa-cart-plus me-1"></i>
-                        Add to cart
-                    </button>
-                </div>
+                {% if product.stock_quantity == 0 %}
+                    <p class="text-danger">Out of Stock</p>
+                {% else %}
+                    <p class="text-muted">Available Quantity: {{ product.stock_quantity }}</p>
+                    <form method="POST" action="{% url 'add_to_cart' product.id %}">
+                        {% csrf_token %}
+                        <div class="d-flex mb-4">
+                            <input class="form-control text-center me-3" id="inputQuantity" name="quantity" type="number" value="1" min="1" max="{{ product.stock_quantity }}" style="max-width: 5rem;">
+                            <button class="btn btn-outline-dark flex-shrink-0" type="submit">
+                                <i class="fas fa-cart-plus me-1"></i>
+                                Add to cart
+                            </button>
+                        </div>
+                    </form>
+                {% endif %}
             </div>
         </div>
 
         <hr class="my-5">
 
         <!-- Related Products Section -->
-    <div class="row mt-5">
-        <h3 class="text-center mb-4">Related Products</h3>
-        <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
-            {% for related_product in related_products %}
-                <div class="col mb-5">
-                    <div class="card h-100">
-                        <img class="card-img-top" src="{{ related_product.image_url }}" alt="{{ related_product.name }}">
-                        <div class="card-body p-4">
-                            <div class="text-center">
-                                <h5 class="fw-bolder">{{ related_product.name }}</h5>
-                                <p>${{ related_product.price }}</p>
+        <div class="row mt-5">
+            <h3 class="text-center mb-4">Related Products</h3>
+            <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
+                {% for related_product in related_products %}
+                    <div class="col mb-5">
+                        <div class="card h-100">
+                            <img class="card-img-top" src="{{ related_product.image_url }}" alt="{{ related_product.name }}">
+                            <div class="card-body p-4">
+                                <div class="text-center">
+                                    <h5 class="fw-bolder">{{ related_product.name }}</h5>
+                                    <p>${{ related_product.price }}</p>
+                                </div>
                             </div>
-                        </div>
-                        <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
-                            <div class="text-center">
-                                <a class="btn btn-outline-dark mt-auto" href="{% url 'product_detail' related_product.id %}">View Details</a>
+                            <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
+                                <div class="text-center">
+                                    <a class="btn btn-outline-dark mt-auto" href="{% url 'product_detail' related_product.id %}">View Details</a>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
-            {% endfor %}
+                {% endfor %}
+            </div>
         </div>
-    </div>
+    </section>
 </div>
 {% endblock %}

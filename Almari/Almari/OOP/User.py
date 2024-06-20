@@ -8,6 +8,7 @@ from django.db.utils import IntegrityError
 from user.models import CustomerProfile, SellerProfile
 from django.contrib.auth.models import User
 from Almari.OOP.Password import Password, CommonMeta
+from Almari.OOP.Cart import Cart
 #Abstract class for user and its subclasses CustomerUser and AdminUser to implement abstract methods login and signup.
 #Inheritance feature used
 class AbstractUser(Password, ABC ,metaclass=CommonMeta):
@@ -15,6 +16,7 @@ class AbstractUser(Password, ABC ,metaclass=CommonMeta):
         self.username = username
         self.email = email
         self.password = password
+       
 
     @abstractmethod
     def login(self):
@@ -36,20 +38,9 @@ class CustomerUser(AbstractUser):
     def __init__(self, username, email, password, address):
         super().__init__(username, email, password)
         self.address = address
+        self.cart = Cart(self)              #composition feature used
 
     def validate_signup(self,confirm):
-        # if not self.username or not self.email or not self.password or not confirm or not self.address :
-        #     return "All fields are required."
-        # else:
-        #     if CustomerProfile.objects.filter(username=self.username).exists():
-        #         return "Username already exists.\nPlease try another one"
-        #     elif len(self.password) < 8 or not re.search(r'[!@#$%^&*(),.?":{}|<>]', self.password):
-        #         return "Password must be at least 8 characters long and contain a special character."
-        #     elif self.password and confirm != self.password:
-        #         return "The passwords must match" 
-        #     elif not re.search(self.email, r'^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$'):
-        #         return "Invalid email address"
-        # return None
         #try except block to handle possible exceptions
         try:
             if not self.username or not self.email or not self.password or not confirm or not self.address:
@@ -121,6 +112,7 @@ class CustomerUser(AbstractUser):
                         return None, "Invalid password"
             except CustomerProfile.DoesNotExist:
                 return None, "Username does not exist."
+
 
 """class AdminUser(AbstractUser):
     def validate_signup(self):

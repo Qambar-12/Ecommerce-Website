@@ -17,24 +17,29 @@ def customer_signup(request):
         captcha = request.POST['captcha']
         if captcha:
             if captcha == request.session.get('captcha', ''):
-                
                 customer_user = CustomerUser(username, email, password, address)
                 error = customer_user.signup(confirm_password)
 
                 if error:
+                    # Regenerate CAPTCHA if form is not valid
+                    captcha_image, captcha_str = generate_image_captcha()
+                    request.session['captcha'] = captcha_str
                     messages.error(request, error)
                     request.session['form_data'] = request.POST.dict()
                     #so that the form data is not lost when the page is reloaded
                     return render(request, 'user/customer_signup.html',{
                         'username': username,
                         'email': email,
-                        'address': address})
+                        'address': address,
+                        'captcha_image': captcha_image})
                 
                 else:
                     if 'form_data' in request.session:
-                        del request.session['form_data']
+                        del request.session['form_data']    
                     request.session['logged_in'] = True    
-                    messages.success(request, 'You have signed up successfully')    
+                    messages.success(request, 'You have signed up successfully') 
+                    #storing username in session dictionary to retrieve it while adding to cart
+                    request.session['username'] = username   
                     return redirect('storeHome')
             else:
                 messages.error(request, 'Invalid CAPTCHA')
@@ -77,12 +82,17 @@ def customer_login(request):
                     #login(request, customer)
                     #so the navbar can show the logout button and hide the login and signup buttons
                     request.session['logged_in'] = True
+                    #storing it in session dictionary to use it later while adding to cart
+                    request.session['username'] = username
                     messages.success(request, 'You have been logged in')
                     return redirect('storeHome')  
                 else:
+                    # Regenerate CAPTCHA if form is not valid
+                    captcha_image, captcha_str = generate_image_captcha()
+                    request.session['captcha'] = captcha_str
                     request.session['form_data'] = request.POST.dict()
                     messages.error(request, error)
-                    return render(request, 'user/customer_login.html', {'username': username, 'password': password})
+                    return render(request, 'user/customer_login.html', {'username': username, 'password': password, 'captcha_image': captcha_image})
             else:
                 messages.error(request, 'Invalid CAPTCHA')
                 # Regenerate CAPTCHA if form is not valid

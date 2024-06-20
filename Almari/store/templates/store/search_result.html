@@ -40,7 +40,9 @@
                 </div>
             </div>
         {% empty %}
-            <p class="text-center">No products found.</p>
+            <div class="text-center">
+                <img src="{{ MEDIA_URL }}/media/uploads/no-product.png" alt="No products found" class="img-fluid">
+            </div>
         {% endfor %}
     </div>
 </div>
