@@ -40,10 +40,28 @@ class Cart:
     def total(self):
         print(self.cart.values())
         return sum(float(product[1]) for product in self.cart.values())    
-    def remove_product(self, product):
-        pass      
+    
+    def remove_product(self, product, qty):
+        product_id = str(product.id)
+        product_qty = int(qty)
+        if product_id in self.cart:
+            self.cart[product_id][0] -= product_qty
+            self.cart[product_id][1] -= float(product.price) * product_qty
+            self.session.modified = True     
+
+    def update_product(self,product,qty):
+        product_id = str(product.id)
+        product_qty = int(qty)
+        if product_id in self.cart:
+            self.cart[product_id][0] += product_qty
+            self.cart[product_id][1] += float(product.price) * product_qty
+            self.session.modified = True
+
     def clear_cart(self):
-        pass
+        self.cart.clear()
+        self.session['cart'] = {}
+        self.session.modified = True
+
     def load_cart(self):
         return self.cart       
     def save_cart(self):

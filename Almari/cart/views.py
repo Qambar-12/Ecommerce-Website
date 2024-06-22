@@ -55,12 +55,66 @@ def add_to_cart(request, product_id):
             except ValueError as e:
                 messages.error(request, str(e))
 
-def remove_from_cart(request):
-    pass
-def update_cart(request):
-    pass
+def remove_from_cart(request, product_id):
+    if request.method == 'POST':
+        product_model = get_object_or_404(ProductModel, pk=product_id)
+        product = Product.from_model(product_model)
+        try:
+            username = request.session['username']
+            customer = CustomerUser(username, '', '', '', request=request)
+            cart = customer.cart
+
+            if str(product.id) not in cart.cart:
+                messages.error(request, 'Product not in cart.')
+            else:
+                customer.cart.remove_product(product, 1)
+                if cart.cart[str(product.id)][0] <= 0:
+                    del cart.cart[str(product.id)]  # Remove product from cart if quantity is 0
+                messages.success(request, 'Removed from cart successfully.')
+
+        except Exception as e:
+            messages.error(request, str(e))
+
+        return redirect('cart_summary')
+
+def update_cart(request, product_id):
+    if request.method == 'POST':
+        product_model = get_object_or_404(ProductModel, pk=product_id)
+        product = Product.from_model(product_model)
+        try:
+            username = request.session['username']
+            customer = CustomerUser(username, '', '', '', request=request)
+            cart = customer.cart
+            cart_quantity = cart.cart[str(product.id)][0]
+            available_quantity = product.stock_quantity - cart_quantity
+            if str(product.id) not in cart.cart:
+                messages.error(request, 'Product not in cart.')
+            else:
+                cart_quantity = cart.cart[str(product.id)][0]
+                available_quantity = product.stock_quantity - cart_quantity
+                if cart_quantity < product.stock_quantity:
+                    customer.cart.update_product(product, 1)
+                    messages.success(request, 'Updated cart successfully.')
+                else:
+                    messages.error(request, f'The entered quantity exceeds the available quantity. Please enter a quantity less than or equal to {available_quantity}.')
+
+        except Exception as e:
+            messages.error(request, str(e))
+
+        return redirect('cart_summary')
+
 def clear_cart(request):
-    pass
+    if request.method == 'POST':
+        try:
+            username = request.session['username']
+            customer = CustomerUser(username, '', '', '', request=request)
+            customer.cart.clear_cart()
+            messages.success(request, 'Cart cleared successfully.')
+        except Exception as e:
+            messages.error(request, f'An error occurred while clearing the cart: {str(e)}')
+
+        return redirect('cart_summary')
+        
 def save_cart(request):
     pass    
 """
