@@ -1,10 +1,13 @@
-"""from django.shortcuts import render,redirect
+from django.shortcuts import render,redirect
 from django.contrib import messages
+from django.shortcuts import get_object_or_404
 from user.models import CustomerProfile
 from store.models import Product as ProductModel
 from Almari.OOP.Category import Product
 from Almari.OOP.Cart import Cart
-from Almari.OOP.User import CustomerUser
+from user.views import CustomerUser
+#from Almari.OOP.User import CustomerUser
+
 
 # Create your views here.
 def cart_summary(request):
@@ -13,9 +16,18 @@ def cart_summary(request):
             messages.error(request, 'You must be logged in or sign up first.')
             return redirect('storeHome')
         else:
-            cart = Cart.load_cart()
-            return render(request, 'cart/cart_summary.html', {'cart':cart})
-
+            username = request.session['username']
+            customer = CustomerUser(username, '', '', '', request=request)
+            cart = customer.cart
+            #using overloaded __len__ method to check if the cart is empty or not
+            if len(cart) == 0:
+                 cart = None
+                 return render(request, 'cart/cart_summary.html', {'cart': cart})
+            else:
+                total = cart.total()
+                total = str(total)          #because the total is of type Decimal that is not serializable 
+                cart = cart.load_cart()
+                return render(request, 'cart/cart_summary.html', {'cart': cart, 'total': total})
 def add_to_cart(request, product_id):
     if request.method == 'POST':
         if 'logged_in' not in request.session:
@@ -33,11 +45,11 @@ def add_to_cart(request, product_id):
                 #since the CustomerUser owns the cart (composition) , the cart is instantiated in the CustomerUser class
                 #i.e if None returned from Cart class
                 username = request.session['username']
-                customer_model = CustomerProfile.objects.get(username = username)
-                customer = CustomerUser(customer_model.username,'','','')
-                error = customer.cart.add_product(product, qty)
+                customer = CustomerUser(username, '', '', '', request=request)
+                error = customer.cart.add_to_cart(product, qty)
                 if not error:
                     messages.success(request, f'Added to cart successfully !!!.')
+                    return redirect('product_detail', product_id=product_id)
                 else:
                     messages.error(request, error)
             except ValueError as e:
@@ -50,4 +62,32 @@ def update_cart(request):
 def clear_cart(request):
     pass
 def save_cart(request):
-    pass    """
+    pass    
+"""
+from Almari.OOP.Cart import Cart
+from django.contrib import messages
+from django import get_object_or_404
+def add_to_cart(request):
+	# Get the cart
+	cart = Cart(request)
+	# test for POST
+	if request.POST.get('action') == 'post':
+		# Get stuff
+		product_id = int(request.POST.get('product_id'))
+		product_qty = int(request.POST.get('product_qty'))
+
+		# lookup product in DB
+		product = get_object_or_404(Product, id=product_id)
+		
+		# Save to session
+		cart.add(product=product, quantity=product_qty)
+
+		# Get Cart Quantity
+		cart_quantity = cart.__len__()
+
+		# Return resonse
+		# response = JsonResponse({'Product Name: ': product.name})
+		response = JsonResponse({'qty': cart_quantity})
+		messages.success(request, ("Product Added To Cart..."))
+		return response
+"""

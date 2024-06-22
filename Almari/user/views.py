@@ -17,7 +17,7 @@ def customer_signup(request):
         captcha = request.POST['captcha']
         if captcha:
             if captcha == request.session.get('captcha', ''):
-                customer_user = CustomerUser(username, email, password, address)
+                customer_user = CustomerUser(username, email, password, address, request = request)
                 error = customer_user.signup(confirm_password)
 
                 if error:
@@ -75,7 +75,7 @@ def customer_login(request):
         captcha = request.POST['captcha']
         if captcha:
             if captcha == request.session.get('captcha', ''):
-                customer_user = CustomerUser(username, '', password, '')
+                customer_user = CustomerUser(username, '', password, '',request = request)
                 customer, error = customer_user.login(username, password)
                 if customer:
                     # Log in the customer

@@ -35,11 +35,11 @@ class AbstractUser(Password, ABC ,metaclass=CommonMeta):
 class CustomerUser(AbstractUser):
     #class variable to keep track of whether the customer is logged in or not
     logged_in = False
-    def __init__(self, username, email, password, address):
+    def __init__(self, username, email, password, address,request = None):
         super().__init__(username, email, password)
         self.address = address
-        self.cart = Cart(self)              #composition feature used
-
+        self.request = request
+        self.cart = Cart(request)              #composition feature used (everytime cart's constructor runs , it assigns the instance attributes session value of request.session and so that it can check if the cart is already present in the session or not and if not it creates a new cart for the user)
     def validate_signup(self,confirm):
         #try except block to handle possible exceptions
         try:
@@ -76,6 +76,7 @@ class CustomerUser(AbstractUser):
         #filing in database in both tables because of one to one relationship between User and CustomerProfile
         customer = CustomerProfile(user=user,username=self.username, email=self.email, password=self.password, address=self.address)
         customer.save()
+        self.cart = Cart(self.request)      #initializing the cart after signup
         return None
     
     def validate_login(self):
@@ -100,6 +101,7 @@ class CustomerUser(AbstractUser):
                 if customer.created_by_admin:
                     if self.password == customer.password:
                         CustomerUser.logged_in = True
+                        self.cart = Cart(self.request)          #initializing the cart after login
                         return customer, None
                     else:
                         return None, "Invalid password"
@@ -107,6 +109,7 @@ class CustomerUser(AbstractUser):
                     encrypted_password = self.encrypt_password_login(password, username, "customer")
                     if check_password(encrypted_password, customer.password):
                         CustomerUser.logged_in = True
+                        self.cart = Cart(self.request)      #initializing the cart after login
                         return customer, None    
                     else:
                         return None, "Invalid password"

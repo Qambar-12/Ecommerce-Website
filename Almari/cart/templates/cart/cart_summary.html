@@ -11,5 +11,40 @@
                     </div>
                 </div>
             </header>
+            <div class="container mt-5">
+                {% if not cart %}
+                    <div class="text-center">
+                        <img src="{{ MEDIA_URL }}/media/uploads/empty_cart.png" alt="Empty Cart" style="max-width: 100%; height: auto;">
+                        <p>Your cart is empty. Start adding some products!</p>
+                    </div>
+                {% else %}
+                    <table class="table table-bordered table-hover">
+                        <thead class="thead-dark">
+                            <tr>
+                                <th scope="col" style="width: 20%;">Product Image</th>
+                                <th scope="col">Product Name</th>
+                                <th scope="col" style="width: 10%;">Quantity</th>
+                                <th scope="col" style="width: 15%;">Subtotal</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for product_id, product_info in cart.items %}
+                                <tr>
+                                    <td class="text-center">
+                                        <img src="{{ product_info.3 }}" alt="{{ product_info.2 }}" class="img-fluid" style="max-width: 100px; height: auto;">
+                                    </td>
+                                    <td>{{ product_info.2 }}</td>
+                                    <td class="text-center">{{ product_info.0 }}</td>
+                                    <td class="text-end">${{ product_info.1|floatformat:2 }}</td>
+                                </tr>
+                            {% endfor %}
+                            <tr>
+                                <td colspan="3" class="text-end"><strong>Total</strong></td>
+                                <td class="text-end"><strong>${{ total|floatformat:2 }}</strong></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                {% endif %}    
+            </div>
             <br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>              
 {%endblock%}        
