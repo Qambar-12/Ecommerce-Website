@@ -1,0 +1,42 @@
+{% extends 'store/base.html' %}
+
+{% block content %}
+<!-- Header-->
+<header class="bg-dark py-5">
+    <div class="container px-4 px-lg-5 my-5">
+        <div class="text-center text-white">
+            <h1 class="display-4 fw-bolder">Payment Info</h1>
+            <p class="lead fw-normal text-white-50 mb-0">Please enter payment details...</details>...</p>
+        </div>
+    </div>
+</header>
+<div class="container">
+    <div class="row">
+        <center>
+            <div class="col-8">
+                <br/><br/>
+                <form method="POST" action="{% url 'payment_info' %}">
+                    {% csrf_token %}
+                    <div class="mb-3">
+                        <input type="text" class="form-control" name="card_number" placeholder="Card Number"
+                               value="{{ card_number|default_if_none:'' }}">
+                    </div>
+                    <div class="mb-3">
+                        <input type="text" class="form-control" name="cardholder_name" placeholder="Cardholder Name"
+                               value="{{ cardholder_name|default_if_none:'' }}">
+                    </div>
+                    <div class="mb-3">
+                        <input type="password" class="form-control" name="cvv" placeholder="CVV"
+                               value="{{ cvv|default_if_none:'' }}">
+                    </div>
+                    <br/><br/>
+                    <button type="submit" class="btn btn-secondary btn-success">Place Order</button>
+                </form>
+
+                <br/><br/><br/><br/><br/><br/><br/><br/>
+            </div>
+        </center>
+    </div>
+</div>
+<br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br />
+{% endblock %}
