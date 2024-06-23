@@ -27,7 +27,7 @@
                     <span>${{ product.price }}</span>
                 </div>
                 <p class="lead">{{ product.description }}</p>
-                {% if product.stock_quantity == 0 %}
+                {% if available_quantity == 0 %}
                     <p class="text-danger">Out of Stock</p>
                 {% else %}
                     <p class="text-muted">Available Quantity: {{ available_quantity }}</p>

@@ -96,7 +96,10 @@ def update_cart(request, product_id):
                     customer.cart.update_product(product, 1)
                     messages.success(request, 'Updated cart successfully.')
                 else:
-                    messages.error(request, f'The entered quantity exceeds the available quantity. Please enter a quantity less than or equal to {available_quantity}.')
+                    if available_quantity == 0:
+                        messages.error(request, 'Product out of stock.')
+                    else:
+                        messages.error(request, f'The entered quantity exceeds the available quantity. Please enter a quantity less than or equal to {available_quantity}.')
 
         except Exception as e:
             messages.error(request, str(e))

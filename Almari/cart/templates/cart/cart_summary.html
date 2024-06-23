@@ -37,12 +37,12 @@
                             <div class="input-group quantity-buttons">
                                 <form method="POST" action="{% url 'remove_from_cart' product_id %}" class="d-inline">
                                     {% csrf_token %}
-                                    <button class="btn btn-sm btn-outline-secondary quantity-button" type="submit">-</button>
+                                    <button class="btn btn-sm btn-outline-secondary quantity-button" type="submit">➖</button>
                                 </form>
                                 <input class="form-control text-center d-inline-block quantity-input" name="quantity" type="number" value="{{ product_info.0 }}" min="1" max="{{ product_info.4 }}" readonly>
                                 <form method="POST" action="{% url 'update_cart' product_id %}" class="d-inline">
                                     {% csrf_token %}
-                                    <button class="btn btn-sm btn-outline-secondary quantity-button" type="submit">+</button>
+                                    <button class="btn btn-sm btn-outline-secondary quantity-button" type="submit">➕</button>
                                 </form>
                             </div>
                         </td>
@@ -58,7 +58,11 @@
         <div class="text-end mt-3">
             <form method="POST" action="{% url 'clear_cart' %}" class="d-inline">
                 {% csrf_token %}
-                <button class="btn btn-sm btn-warning" type="submit">Clear Cart</button>
+                <button class="btn btn-sm btn-danger" type="submit">Clear Cart</button>
+            </form>
+            <form method="POST" action="#" class="d-inline">
+                {% csrf_token %}
+                <button class="btn btn-sm btn-success" type="submit">Checkout</button>
             </form>
         </div>
     {% endif %}
