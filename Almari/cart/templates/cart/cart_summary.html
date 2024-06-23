@@ -12,61 +12,64 @@
 </header>
 <div class="container mt-5">
     {% if not cart %}
-        <div class="text-center">
-            <img src="{{ MEDIA_URL }}/media/uploads/empty_cart.png" alt="Empty Cart" style="max-width: 100%; height: auto;">
-            <p>Your cart is empty. Start adding some products!</p>
-        </div>
+    <div class="text-center">
+        <img src="{{ MEDIA_URL }}/media/uploads/empty_cart.png" alt="Empty Cart" style="max-width: 100%; height: auto;">
+        <p>Your cart is empty. Start adding some products!</p>
+    </div>
     {% else %}
-        <table class="table table-bordered table-hover">
-            <thead class="thead-dark">
-                <tr>
-                    <th scope="col" style="width: 20%;">Product Image</th>
-                    <th scope="col">Product Name</th>
-                    <th scope="col" style="width: 20%;">Quantity</th>
-                    <th scope="col" style="width: 15%;">Subtotal</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for product_id, product_info in cart.items %}
-                    <tr>
-                        <td class="text-center">
-                            <img src="{{ product_info.3 }}" alt="{{ product_info.2 }}" class="img-fluid" style="max-width: 100px; height: auto;">
-                        </td>
-                        <td>{{ product_info.2 }}</td>
-                        <td class="text-center">
-                            <div class="input-group quantity-buttons">
-                                <form method="POST" action="{% url 'remove_from_cart' product_id %}" class="d-inline">
-                                    {% csrf_token %}
-                                    <button class="btn btn-sm btn-outline-secondary quantity-button" type="submit">➖</button>
-                                </form>
-                                <input class="form-control text-center d-inline-block quantity-input" name="quantity" type="number" value="{{ product_info.0 }}" min="1" max="{{ product_info.4 }}" readonly>
-                                <form method="POST" action="{% url 'update_cart' product_id %}" class="d-inline">
-                                    {% csrf_token %}
-                                    <button class="btn btn-sm btn-outline-secondary quantity-button" type="submit">➕</button>
-                                </form>
-                            </div>
-                        </td>
-                        <td class="text-end">${{ product_info.1|floatformat:2 }}</td>
-                    </tr>
-                {% endfor %}
-                <tr>
-                    <td colspan="3" class="text-end"><strong>Total</strong></td>
-                    <td class="text-end"><strong>${{ total|floatformat:2 }}</strong></td>
-                </tr>
-            </tbody>
-        </table>
-        <div class="text-end mt-3">
-            <form method="POST" action="{% url 'clear_cart' %}" class="d-inline">
-                {% csrf_token %}
-                <button class="btn btn-sm btn-danger" type="submit">Clear Cart</button>
-            </form>
-            <form method="POST" action="#" class="d-inline">
-                {% csrf_token %}
-                <button class="btn btn-sm btn-success" type="submit">Checkout</button>
-            </form>
-        </div>
+    <table class="table">
+        <thead>
+            <tr>
+                <th class="text-center">Product Image</th>
+                <th>Product Name</th>
+                <th class="text-center">Quantity</th>
+                <th class="text-end">Unit Price</th>
+                <th class="text-end">Subtotal</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for product_id, product_info in cart.items %}
+            <tr>
+                <td class="text-center">
+                    <img src="{{ product_info.4 }}" alt="{{ product_info.3 }}" class="img-fluid"
+                        style="max-width: 100px; height: auto;">
+                </td>
+                <td>{{ product_info.3 }}</td>
+                <td class="text-center">
+                    <div class="input-group quantity-buttons">
+                        <form method="POST" action="{% url 'remove_from_cart' product_id %}" class="d-inline">
+                            {% csrf_token %}
+                            <button class="btn btn-sm btn-outline-secondary quantity-button" type="submit">➖</button>
+                        </form>
+                        <input class="form-control text-center d-inline-block quantity-input" name="quantity"
+                            type="number" value="{{ product_info.0 }}" min="1" max="{{ product_info.0 }}" readonly>
+                        <form method="POST" action="{% url 'update_cart' product_id %}" class="d-inline">
+                            {% csrf_token %}
+                            <button class="btn btn-sm btn-outline-secondary quantity-button" type="submit">➕</button>
+                        </form>
+                    </div>
+                </td>
+                <td class="text-end">${{ product_info.1|floatformat:2 }}</td>
+                <td class="text-end">${{ product_info.2|floatformat:2 }}</td>
+            </tr>
+            {% endfor %}
+            <tr>
+                <td colspan="4" class="text-end"><strong>Total</strong></td>
+                <td class="text-end"><strong>${{ total|floatformat:2 }}</strong></td>
+            </tr>
+        </tbody>
+    </table>
+    <div class="text-end mt-3">
+        <form method="POST" action="{% url 'clear_cart' %}" class="d-inline">
+            {% csrf_token %}
+            <button class="btn btn-sm btn-danger" type="submit">Clear Cart</button>
+        </form>
+        <form method="POST" action="#" class="d-inline">
+            {% csrf_token %}
+            <button class="btn btn-sm btn-success" type="submit">Checkout</button>
+        </form>
+    </div>
     {% endif %}
 </div>
-<br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
+<br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br />
 {% endblock %}
-

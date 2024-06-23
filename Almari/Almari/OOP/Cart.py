@@ -20,10 +20,10 @@ class Cart:
         # Logic
         if product_id in self.cart:
             self.cart[product_id][0] += int(product_qty)
-            self.cart[product_id][1] += subtotal
+            self.cart[product_id][2] += subtotal
         else:
             # adding the products to the cart is aggregration feature (dictionary of lists used to store the products in the cart)
-            self.cart[product_id] = [int(product_qty),subtotal, product_name, product_image]        
+            self.cart[product_id] = [int(product_qty),float(product.price),subtotal, product_name, product_image]        
 
         self.session.modified = True
 
@@ -39,14 +39,14 @@ class Cart:
     
     def total(self):
         print(self.cart.values())
-        return sum(float(product[1]) for product in self.cart.values())    
+        return sum(float(product[2]) for product in self.cart.values())    
     
     def remove_product(self, product, qty):
         product_id = str(product.id)
         product_qty = int(qty)
         if product_id in self.cart:
             self.cart[product_id][0] -= product_qty
-            self.cart[product_id][1] -= float(product.price) * product_qty
+            self.cart[product_id][2] -= float(product.price) * product_qty
             self.session.modified = True     
 
     def update_product(self,product,qty):
@@ -54,7 +54,7 @@ class Cart:
         product_qty = int(qty)
         if product_id in self.cart:
             self.cart[product_id][0] += product_qty
-            self.cart[product_id][1] += float(product.price) * product_qty
+            self.cart[product_id][2] += float(product.price) * product_qty
             self.session.modified = True
 
     def clear_cart(self):
