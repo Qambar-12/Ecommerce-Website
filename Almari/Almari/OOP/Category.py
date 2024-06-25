@@ -37,7 +37,13 @@ class Product:
     def get_related_products(self):
         related_product_models = ProductModel.objects.filter(category=self.category.model_instance).exclude(id=self.id)[:4]
         return [Product.from_model(product) for product in related_product_models]
-
+    
+    # def price_low_to_high(self):
+    #     return sorted(self, key=lambda p: p.price)
+    
+    # def price_high_to_low(self):
+    #     return sorted(self, key=lambda p: p.price,reverse=True)
+    
     def __str__(self):
         return self.name
     

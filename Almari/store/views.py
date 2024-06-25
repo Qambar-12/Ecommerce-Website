@@ -20,23 +20,31 @@ def category_detail(request, category_id):
     category_model = get_object_or_404(CategoryModel, id=category_id)
     category = Category.from_model(category_model)
     category.load_products()
-    return render(request, 'store/category_detail.html', {'category': category, 'products': category.products})
+    #get the sort option from request
+    sort_option = request.GET.get('sort','default')
+    if sort_option == 'price_low_to_high':
+        category.products = sorted(category.products, key=lambda p: p.price)
+    elif sort_option == 'price_high_to_low':
+        category.products = sorted(category.products, key=lambda p: p.price, reverse=True)
+
+    return render(request, 'store/category_detail.html', {'category': category, 'products': category.products,'sort_option':sort_option})
 
 def product_detail(request, product_id):
     product_model = get_object_or_404(ProductModel, id=product_id)
     product = Product.from_model(product_model)
     related_products = product.get_related_products()
-    username = request.session['username']
-    customer = CustomerUser(username, '', '', '', request=request)
-    cart = customer.cart
-    if str(product.id) in cart.cart:
-        cart_quantity = cart.cart[str(product.id)][0]
+    if 'logged_in' in request.session:
+        username = request.session['username']
+        customer = CustomerUser(username, '', '', '', request=request)
+        cart = customer.cart
+        if str(product.id) in cart.cart:
+            cart_quantity = cart.cart[str(product.id)][0]
+        else:
+            cart_quantity = 0
+        available_quantity = product.stock_quantity - cart_quantity
+        return render(request, 'store/product_detail.html', {'product': product, 'related_products': related_products , 'available_quantity': available_quantity})
     else:
-        cart_quantity = 0
-    
-    available_quantity = product.stock_quantity - cart_quantity
-    return render(request, 'store/product_detail.html', {'product': product, 'related_products': related_products , 'available_quantity': available_quantity})
-
+        return render(request, 'store/product_detail.html', {'product': product, 'related_products': related_products})
 def search(request):
     query = request.GET.get('q')
     category_models = CategoryModel.objects.all()

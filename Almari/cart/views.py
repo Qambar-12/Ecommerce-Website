@@ -106,13 +106,14 @@ def update_cart(request, product_id):
 
         return redirect('cart_summary')
 
-def clear_cart(request):
+def clear_cart(request,show_message=True):
     if request.method == 'POST':
         try:
             username = request.session['username']
             customer = CustomerUser(username, '', '', '', request=request)
             customer.cart.clear_cart()
-            messages.success(request, 'Cart cleared successfully.')
+            if show_message:
+                messages.success(request, 'Cart cleared successfully.')
         except Exception as e:
             messages.error(request, f'An error occurred while clearing the cart: {str(e)}')
 
@@ -120,31 +121,3 @@ def clear_cart(request):
         
 def save_cart(request):
     pass    
-"""
-from Almari.OOP.Cart import Cart
-from django.contrib import messages
-from django import get_object_or_404
-def add_to_cart(request):
-	# Get the cart
-	cart = Cart(request)
-	# test for POST
-	if request.POST.get('action') == 'post':
-		# Get stuff
-		product_id = int(request.POST.get('product_id'))
-		product_qty = int(request.POST.get('product_qty'))
-
-		# lookup product in DB
-		product = get_object_or_404(Product, id=product_id)
-		
-		# Save to session
-		cart.add(product=product, quantity=product_qty)
-
-		# Get Cart Quantity
-		cart_quantity = cart.__len__()
-
-		# Return resonse
-		# response = JsonResponse({'Product Name: ': product.name})
-		response = JsonResponse({'qty': cart_quantity})
-		messages.success(request, ("Product Added To Cart..."))
-		return response
-"""

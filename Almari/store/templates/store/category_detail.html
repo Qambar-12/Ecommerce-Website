@@ -23,6 +23,17 @@
 </header>
 <section class="py-5">
     <div class="container px-4 px-lg-5 mt-5">
+        <div class="row mb-4">
+            <div class="col text-right">
+                <form method="get" id="sortForm">
+                    <select name="sort" class="form-select" onchange="document.getElementById('sortForm').submit()">
+                        <option value="default" {% if sort_option == 'default' %}selected{% endif %}>Sort By</option>
+                        <option value="price_low_to_high" {% if sort_option == 'price_low_to_high' %}selected{% endif %}>Price: Low to High</option>
+                        <option value="price_high_to_low" {% if sort_option == 'price_high_to_low' %}selected{% endif %}>Price: High to Low</option>
+                    </select>
+                </form>
+            </div>
+        </div>
         <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
             {% for product in products %}
                 <div class="col mb-5">

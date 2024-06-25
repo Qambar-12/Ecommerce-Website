@@ -15,7 +15,7 @@
         <center>
             <div class="col-8">
                 <br/><br/>
-                <form method="POST" action="{% url 'payment_info' %}">
+                <form method="POST" action="{% url 'confirm_order' %}">
                     {% csrf_token %}
                     <div class="mb-3">
                         <input type="text" class="form-control" name="card_number" placeholder="Card Number"
