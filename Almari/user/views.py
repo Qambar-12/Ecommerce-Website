@@ -118,6 +118,10 @@ def customer_logout(request):
 def admin_login(request):
     admin_login_url = reverse('admin:login')
     return redirect(admin_login_url)
+def seller_signup(request):
+    return render(request, 'user/seller_signup.html')
+def seller_login(request):
+    return render(request, 'user/seller_login.html')
 """def admin_signup(request):
     if request.method == 'POST':
         username = request.POST['username']

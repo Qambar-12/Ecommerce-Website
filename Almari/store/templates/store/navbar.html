@@ -22,7 +22,7 @@
                     <a class="nav-link dropdown-toggle" id="loginDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Login</a>
                     <ul class="dropdown-menu" aria-labelledby="loginDropdown">
                         <li><a class="dropdown-item" href="{% url 'customer_login' %}">Customer Login</a></li>
-                        <li><a class="dropdown-item" href="#">Seller Login</a></li>
+                        <li><a class="dropdown-item" href="{%url 'seller_login'%}">Seller Login</a></li>
                         <li><a class="dropdown-item" href="{% url 'admin_login' %}">Admin Login</a></li>
                     </ul>
                 </li>
@@ -30,7 +30,7 @@
                     <a class="nav-link dropdown-toggle" id="signupDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Sign Up</a>
                     <ul class="dropdown-menu" aria-labelledby="signupDropdown">
                         <li><a class="dropdown-item" href="{% url 'customer_signup' %}">Customer Sign Up</a></li>
-                        <li><a class="dropdown-item" href="#">Seller Sign Up</a></li>
+                        <li><a class="dropdown-item" href="{%url 'seller_signup'%}">Seller Sign Up</a></li>
                     </ul>
                 </li>
                 {% endif %}

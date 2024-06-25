@@ -25,8 +25,6 @@ class Cart:
             # adding the products to the cart is aggregration feature (dictionary of lists used to store the products in the cart)
             self.cart[product_id] = [int(product_qty),float(product.price),subtotal, product_name, product_image]        
 
-        self.session.modified = True
-
         # Deal with logged in user
         # if self.request.user.is_authenticated:
         #     # Get the current user profile

@@ -26,6 +26,19 @@ class CustomerProfile(UserProfile):
     def __str__(self):
         return f"Username: {self.username}\nEmail: {self.email}\nName: {self.first_name + self.last_name}\nAddress: {self.address}"
 
+class CustomerHistory(models.Model):   
+    """
+    Represents a customer history table in the e-commerce store database.    
+    """
+    customer = models.ForeignKey(CustomerProfile, on_delete=models.CASCADE)
+    date = models.DateField(auto_now_add=True)
+    cart = models.TextField(max_length=1000)
+    total = models.DecimalField(max_digits=10, decimal_places=2)
+    class Meta:
+        verbose_name_plural = "Customer History"
+    def __str__(self):
+        return f"Customer: {self.customer.username}\nDate: {self.date}\nTotal: {self.total}\nCart: {self.cart}"
+
 class SellerProfile(UserProfile):
     """
     Represents a seller profile table in the e-commerce store database.
