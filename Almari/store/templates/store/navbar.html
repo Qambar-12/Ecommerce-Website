@@ -17,6 +17,14 @@
                 <li class="nav-item">
                     <a class="nav-link" href="{% url 'customer_logout' %}">Logout</a>
                 </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" id="historyDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">View History</a>
+                    <ul class="dropdown-menu" aria-labelledby="historyDropdown">
+                        <li><a class="dropdown-item" href="{%url 'retrieve_all_history'%}">View All History</a></li>
+                        <li><a class="dropdown-item" href="#">View by Date</a></li>
+                        <li><a class="dropdown-item" href="#">View by Product</a></li>
+                    </ul>
+                </li>
                 {% else %}
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" id="loginDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Login</a>

@@ -3,6 +3,7 @@ from django.contrib import messages
 from .verification_email import send_verification_email
 from user.models import CustomerProfile
 from cart.views import clear_cart
+from Almari.OOP.User import CustomerUser
 import random, time
 
 # Create your views here.
@@ -52,6 +53,9 @@ def verify_code(request):
             return render(request, 'checkout/confirm_order.html')
         
         if user_code == str(verification_code):
+            username = request.session['username']
+            customer = CustomerUser(username, '', '', '', request=request)
+            customer.cart.save_cart_to_history()
             messages.success(request, 'Your order has been placed successfully!')
             clear_cart(request, show_message = False)
             return redirect('storeHome')

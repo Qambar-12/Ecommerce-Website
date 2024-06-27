@@ -5,6 +5,7 @@ from django.urls import reverse
 from django.contrib import messages
 from .captcha import generate_image_captcha
 from Almari.OOP.User import CustomerUser
+import json
 # Create your views here.
 #Posting the data from the form to the server and saving it in the database if data is valid.
 def customer_signup(request):
@@ -122,6 +123,24 @@ def seller_signup(request):
     return render(request, 'user/seller_signup.html')
 def seller_login(request):
     return render(request, 'user/seller_login.html')
+
+def retrieve_all_history(request):
+    if request.method == 'GET':
+        try :
+            username = request.session['username']
+            customer = CustomerUser(username, '', '', '', request=request)
+            history = customer.history.retrieve_all_history()
+        except Exception as e:
+            messages.error(request,str(e))
+            return render(request, 'user/retrieve_all_history.html',{'history':False})
+        else:
+            return render(request, 'user/retrieve_all_history.html',{'history':history})
+def retrive_by_prod_history(request):
+    return render(request, 'user/retrive_by_prod_history.html')
+
+def retrive_by_date_history(request):
+    return render(request, 'user/retrive_by_date_history.html')
+
 """def admin_signup(request):
     if request.method == 'POST':
         username = request.POST['username']

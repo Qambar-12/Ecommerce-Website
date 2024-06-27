@@ -9,6 +9,7 @@ from user.models import CustomerProfile, SellerProfile
 from django.contrib.auth.models import User
 from Almari.OOP.Password import Password, CommonMeta
 from Almari.OOP.Cart import Cart
+from Almari.OOP.History import History
 #Abstract class for user and its subclasses CustomerUser and AdminUser to implement abstract methods login and signup.
 #Inheritance feature used
 class AbstractUser(Password, ABC ,metaclass=CommonMeta):
@@ -40,6 +41,7 @@ class CustomerUser(AbstractUser):
         self.address = address
         self.request = request
         self.cart = Cart(request)              #composition feature used (everytime cart's constructor runs , it assigns the instance attributes session value of request.session and so that it can check if the cart is already present in the session or not and if not it creates a new cart for the user)
+        self.history = History(request)        #composition feature used (user owns the history object)
     def validate_signup(self,confirm):
         #try except block to handle possible exceptions
         try:
@@ -60,7 +62,7 @@ class CustomerUser(AbstractUser):
             
         except (ValueError, IntegrityError) as e:
             return str(e)
-
+        CustomerUser.logged_in = True
         return None    
 
     def signup(self,confirm):

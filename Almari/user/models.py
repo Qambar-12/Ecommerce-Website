@@ -30,14 +30,14 @@ class CustomerHistory(models.Model):
     """
     Represents a customer history table in the e-commerce store database.    
     """
-    customer = models.ForeignKey(CustomerProfile, on_delete=models.CASCADE)
-    date = models.DateField(auto_now_add=True)
-    cart = models.TextField(max_length=1000)
-    total = models.DecimalField(max_digits=10, decimal_places=2)
+    username = models.CharField(max_length=100,default="")
+    date = models.CharField(max_length=10)
+    cart = models.TextField()
+    total = models.DecimalField(max_digits=20,decimal_places=2)              #using text field to store the total because JSON does not support Decimal type (not serializable)
     class Meta:
         verbose_name_plural = "Customer History"
     def __str__(self):
-        return f"Customer: {self.customer.username}\nDate: {self.date}\nTotal: {self.total}\nCart: {self.cart}"
+        return f"Date: {self.date}\nTotal: {self.total}\nCart: {self.cart}"
 
 class SellerProfile(UserProfile):
     """

@@ -1,4 +1,5 @@
-from user.models import CustomerProfile
+from user.models import CustomerHistory
+import datetime
 class Cart:
     def __init__(self, request):
         # list of dictionaries used to store the products in the cart
@@ -11,6 +12,7 @@ class Cart:
             cart = self.session['cart'] = {}
         # Make sure cart is available on all pages of site
         self.cart = cart
+        self.session.modified = True
     def add_to_cart(self, product, qty=1):
         product_id = str(product.id)        
         product_name = product.name
@@ -36,8 +38,7 @@ class Cart:
         #     current_user.update(old_cart=str(carty))
     
     def total(self):
-        print(self.cart.values())
-        return sum(float(product[2]) for product in self.cart.values())    
+        return sum(float(product[2]) for product in self.cart.values()) 
     
     def remove_product(self, product, qty):
         product_id = str(product.id)
@@ -59,12 +60,14 @@ class Cart:
         self.cart.clear()
         self.session['cart'] = {}
         self.session.modified = True
-
     def load_cart(self):
         return self.cart       
-    def save_cart(self):
-       pass 
+    
+    def save_cart_to_history(self):
+        history = CustomerHistory(username = self.request.session['username'],date = datetime.datetime.now().strftime("%d-%m-%y %H:%M:%S") ,cart = self.cart, total = self.total())       
+        history.save() 
+    
     # since cart is sort of container class
-    def __len__(self):
-        return len(self.cart)                       # operartor overloading used to return the length of the cart i.e 
+    def __len__(self):                              # operartor overloading used to return the length of the cart i.e 
                                                     # the number of unique products in the cart
+        return len(self.cart)                       
