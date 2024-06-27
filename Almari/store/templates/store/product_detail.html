@@ -30,7 +30,9 @@
                 {% if available_quantity == 0 %}
                     <p class="text-danger">Out of Stock</p>
                 {% else %}
-                    <p class="text-muted">Available Quantity: {{ available_quantity }}</p>
+                    {%if request.session.logged_in %}
+                        <p class="text-muted">Available Quantity: {{ available_quantity }}</p>
+                    {% endif %}    
                     <form method="POST" action="{% url 'add_to_cart' product.id %}">
                         {% csrf_token %}
                         <div class="d-flex mb-4">

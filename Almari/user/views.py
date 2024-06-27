@@ -5,7 +5,7 @@ from django.urls import reverse
 from django.contrib import messages
 from .captcha import generate_image_captcha
 from Almari.OOP.User import CustomerUser
-import json
+import ast
 # Create your views here.
 #Posting the data from the form to the server and saving it in the database if data is valid.
 def customer_signup(request):
@@ -130,16 +130,65 @@ def retrieve_all_history(request):
             username = request.session['username']
             customer = CustomerUser(username, '', '', '', request=request)
             history = customer.history.retrieve_all_history()
+            #converting the cart from string to dictionary back again when passing it to the template via context dictionary
+            for record in history:
+                record['cart'] = ast.literal_eval(record['cart'])
         except Exception as e:
-            messages.error(request,str(e))
-            return render(request, 'user/retrieve_all_history.html',{'history':False})
+            messages.error(request,f"Something went wrong please try again {e}")
+            return redirect('storeHome')
         else:
-            return render(request, 'user/retrieve_all_history.html',{'history':history})
-def retrive_by_prod_history(request):
-    return render(request, 'user/retrive_by_prod_history.html')
+            if history:
+                return render(request, 'user/retrieve_all_history.html', {'history': history})
+            else:
+                return render(request, 'user/retrieve_all_history.html', {'history': None})
+def retrieve_by_prod_history(request):
+    if request.method == 'POST':
+        prod = request.POST.get('prod')
+        try:
+            username = request.session['username']
+            customer = CustomerUser(username, '', '', '', request=request)
+            history = customer.history.retrieve_by_prod_history(prod)
+            if isinstance(history, list):
+                #converting the cart from string to dictionary back again when passing it to the template via context dictionary
+                for record in history:
+                    record['cart'] = ast.literal_eval(record['cart'])
+            else:
+                messages.error(request, history)
+                return render(request, 'user/retrieve_by_prod_history.html')        
+        except Exception as e:
+            messages.error(request,f"Something went wrong please try again {e}")
+            return redirect('storeHome')
+        else:
+            if history:
+                return render(request, 'user/retrieve_by_prod_history.html', {'history': history})
+            else:
+                return render(request, 'user/retrieve_by_prod_history.html', {'history': None})
+    return render(request, 'user/retrieve_by_prod_history.html')
 
-def retrive_by_date_history(request):
-    return render(request, 'user/retrive_by_date_history.html')
+def retrieve_by_date_history(request):
+    if request.method == 'POST':
+        date = request.POST.get('date')
+        try:
+            username = request.session['username']
+            customer = CustomerUser(username, '', '', '', request=request)
+            history = customer.history.retrieve_by_date_history(date)
+            print(history)
+            if isinstance(history, list):
+                #converting the cart from string to dictionary back again when passing it to the template via context dictionary
+                for record in history:
+                    record['cart'] = ast.literal_eval(record['cart'])
+            else:
+                messages.error(request, history)
+                return render(request, 'user/retrieve_by_date_history.html')        
+        except Exception as e:
+            messages.error(request,f"Something went wrong please try again {e}")
+            return redirect('storeHome')
+        else:
+            if history:
+                return render(request, 'user/retrieve_by_date_history.html', {'history': history})
+            else:
+                return render(request, 'user/retrieve_by_date_history.html', {'history': None})
+    return render(request, 'user/retrieve_by_date_history.html')
 
 """def admin_signup(request):
     if request.method == 'POST':

@@ -21,8 +21,8 @@
                     <a class="nav-link dropdown-toggle" id="historyDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">View History</a>
                     <ul class="dropdown-menu" aria-labelledby="historyDropdown">
                         <li><a class="dropdown-item" href="{%url 'retrieve_all_history'%}">View All History</a></li>
-                        <li><a class="dropdown-item" href="#">View by Date</a></li>
-                        <li><a class="dropdown-item" href="#">View by Product</a></li>
+                        <li><a class="dropdown-item" href="{%url 'retrieve_by_date_history'%}">View by Date</a></li>
+                        <li><a class="dropdown-item" href="{%url 'retrieve_by_prod_history'%}">View by Product</a></li>
                     </ul>
                 </li>
                 {% else %}

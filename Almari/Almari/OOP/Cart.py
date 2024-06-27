@@ -1,4 +1,5 @@
 from user.models import CustomerHistory
+from store.models import Product as ProductModel 
 import datetime
 class Cart:
     def __init__(self, request):
@@ -66,7 +67,12 @@ class Cart:
     def save_cart_to_history(self):
         history = CustomerHistory(username = self.request.session['username'],date = datetime.datetime.now().strftime("%d-%m-%y %H:%M:%S") ,cart = self.cart, total = self.total())       
         history.save() 
-    
+        #filing changes into the database
+        for product_id in self.cart:
+            product = ProductModel.objects.get(id = int(product_id))
+            product.stock_quantity -= self.cart[product_id][0]
+            product.save()    
+
     # since cart is sort of container class
     def __len__(self):                              # operartor overloading used to return the length of the cart i.e 
                                                     # the number of unique products in the cart

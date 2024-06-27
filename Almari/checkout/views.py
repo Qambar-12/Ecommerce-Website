@@ -51,15 +51,15 @@ def verify_code(request):
             messages.error(request, 'Verification code has expired! Please try again.')
             confirm_order(request)
             return render(request, 'checkout/confirm_order.html')
-        
-        if user_code == str(verification_code):
-            username = request.session['username']
-            customer = CustomerUser(username, '', '', '', request=request)
-            customer.cart.save_cart_to_history()
-            messages.success(request, 'Your order has been placed successfully!')
-            clear_cart(request, show_message = False)
-            return redirect('storeHome')
         else:
-            messages.error(request, 'Invalid verification code! Please try again.')
-            return redirect('confirm_order')
+            if user_code == str(verification_code):
+                username = request.session['username']
+                customer = CustomerUser(username, '', '', '', request=request)
+                customer.cart.save_cart_to_history()
+                messages.success(request, 'Your order has been placed successfully!')
+                clear_cart(request, show_message = False)
+                return redirect('storeHome')
+            else:
+                messages.error(request, 'Invalid verification code! Please try again.')
+                return redirect('confirm_order')
     return redirect('confirm_order')
