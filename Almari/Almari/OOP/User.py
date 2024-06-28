@@ -109,12 +109,15 @@ class CustomerUser(AbstractUser):
                         return None, "Invalid password"
                 else:
                     encrypted_password = self.encrypt_password_login(password, username, "customer")
-                    if check_password(encrypted_password, customer.password):
-                        CustomerUser.logged_in = True
-                        self.cart = Cart(self.request)      #initializing the cart after login
-                        return customer, None    
+                    if encrypted_password:
+                        if check_password(encrypted_password, customer.password):
+                            CustomerUser.logged_in = True
+                            self.cart = Cart(self.request)      #initializing the cart after login
+                            return customer, None    
+                        else:
+                            return None, "Invalid password"
                     else:
-                        return None, "Invalid password"
+                        return None, "Invalid password"    
             except CustomerProfile.DoesNotExist:
                 return None, "Username does not exist."
 
