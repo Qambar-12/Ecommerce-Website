@@ -139,8 +139,41 @@ class CustomerUser(AbstractUser):
     def change_password(self, previous_password,new_password,confirm_password):
         if not previous_password or not new_password or not confirm_password:
             return "All fields are required to update password."
-        if previous_password :
-            pass
+        try:
+            customer = CustomerProfile.objects.get(username=self.username)
+            #if the customer is created by django admin the check_password is not called because the password directly stored in database is not hashed .
+            if customer.created_by_admin:
+                if previous_password == customer.password:
+                    if new_password == confirm_password:
+                        User.objects.filter(username=self.username).update(password=new_password)
+                        CustomerProfile.objects.filter(username=self.username).update(password=new_password)
+                        return None
+                    else:
+                        return "The new passwords must match."
+                else:
+                    return "Invalid previous password."    
+            else:
+                encrypted_password = self.encrypt_password_login(previous_password, self.username, "customer")
+                if encrypted_password:
+                    if check_password(encrypted_password, customer.password):
+                        if len(new_password) >= 8 and re.search(r'[!@#$%^&*(),.?":{}|<>]', new_password):
+                            if new_password == confirm_password:
+                                new_password = self.encrypt_password_signup(new_password,self.username,"customer")
+                                new_password = make_password(new_password)
+                                User.objects.filter(username=self.username).update(password=new_password)
+                                CustomerProfile.objects.filter(username=self.username).update(password=new_password)
+                                return None
+                            else:
+                                return "The new passwords must match."
+                        else:
+                            return "Password must be at least 8 characters long and contain a special character."    
+                    else:
+                        return "Invalid previous password."
+                else:
+                    return "Invalid previous password."    
+        except CustomerProfile.DoesNotExist:
+            return "Username does not exist."
+        
         
 """class AdminUser(AbstractUser):
     def validate_signup(self):

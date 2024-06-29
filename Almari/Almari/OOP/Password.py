@@ -53,4 +53,3 @@ class Password(metaclass=CommonMeta):
         """Reads the encryption key from the file."""
         with open(f"Almari/OOP/encryption_keys/{role}/{username}.txt", "r") as key_file:
             return eval(key_file.read())
-        

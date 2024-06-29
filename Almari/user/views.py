@@ -134,11 +134,11 @@ def change_customer_password(request):
     if request.method == 'POST':
         previous_password = request.POST.get('previous_password')
         new_password = request.POST.get('new_password')
-        confirm_new_password = request.POST.get('confirm_new_password')
+        confirm_password = request.POST.get('confirm_password')
         try:
             username = request.session['username']
             customer = CustomerUser(username, '', '', '', request=request)
-            error = customer.change_password(previous_password, new_password, confirm_new_password)
+            error = customer.change_password(previous_password, new_password, confirm_password)
         except Exception as e:
             messages.error(request,f"Something went wrong please try again {e}")
             return redirect('storeHome')

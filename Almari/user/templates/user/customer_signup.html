@@ -17,38 +17,33 @@
                 <br /><br />
                 <form method="POST" action="{%url 'customer_signup'%}">
                     {%csrf_token%}
-                    <div class="mb-3">
                         <input type="text" class="form-control" name="username" placeholder="Username"
-                        value="{{ username|default_if_none:'' }}">
-                        <br/>  
-                    </div>
+                            value="{{ username|default_if_none:'' }}">
+                        <br />
                     <div class="mb-3">
                         <input type="password" class="form-control" name="password" placeholder="Password"
-                        value="{{ password|default_if_none:'' }}">
+                            value="{{ password|default_if_none:'' }}">
                         <br />
                         <div class="mb-3">
                             <input type="password" class="form-control" name="confirm_password"
                                 placeholder="Confirm Password">
                             <br />
                             <div class="mb-3">
-                                <input type="email" class="form-control" name="email" placeholder="Email" 
-                                value="{{ email|default_if_none:'' }}">
-                                <br />
-                                <div class="mb-3">
+                                <input type="email" class="form-control" name="email" placeholder="Email"
+                                    value="{{ email|default_if_none:'' }}">
+                                <br /> 
                                     <input type="text" class="form-control" name="address" placeholder="Address"
-                                    value="{{ address|default_if_none:'' }}">
+                                        value="{{ address|default_if_none:'' }}">
                                     <br />
-                                </div>
                                 <div class="mb-3">
                                     <input type="text" class="form-control" name="captcha" placeholder="Captcha">
+                                    <br />
                                     <img src="data:image/jpeg;base64,{{ captcha_image }}" alt="Captcha">
-                                    <br />    
+                                    <br />
                                 </div>
                                 <br /><br />
                                 <button type="submit" class="btn btn-secondary">Register</button>
                 </form>
-
-
                 <br /><br />
                 <br /><br />
                 <br /><br />
