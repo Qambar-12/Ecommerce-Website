@@ -2,16 +2,78 @@ from django.shortcuts import render, redirect
 from django.contrib import messages
 from .verification_email import send_verification_email
 from user.models import CustomerProfile
+from .models import ShippingAddress, PaymentDetails
 from cart.views import clear_cart
 from Almari.OOP.User import CustomerUser
 import random, time
 
 # Create your views here.
 def shipping_info(request):
-    return render(request, 'checkout/shipping_info.html')
+    username = request.session.get('username')
+    already_info = ShippingAddress.objects.filter(username=username)
+    if request.method == 'POST':
+        shipping_full_name = request.POST.get('shipping_full_name')
+        shipping_email = request.POST.get('shipping_email')
+        shipping_address1 = request.POST.get('shipping_address1')
+        shipping_address2 = request.POST.get('shipping_address2')
+        shipping_city = request.POST.get('shipping_city')
+        shipping_state = request.POST.get('shipping_state')
+        shipping_zipcode = request.POST.get('shipping_zipcode')
+        shipping_country = request.POST.get('shipping_country')
+        if shipping_full_name and shipping_email and shipping_address1 and shipping_city and shipping_country:
+            try:
+                username = request.session['username']
+                if already_info:
+                    ShippingAddress.objects.filter(username=username).delete()
+                    messages.success(request, 'Shipping address updated successfully!')
+                else:
+                    messages.success(request, 'Shipping address saved successfully!')    
+                shipping_address = ShippingAddress(username=username, 
+                                                    shipping_full_name=shipping_full_name, 
+                                                    shipping_email=shipping_email, 
+                                                    shipping_address1=shipping_address1, 
+                                                    shipping_address2=shipping_address2, 
+                                                    shipping_city=shipping_city, 
+                                                    shipping_state=shipping_state, 
+                                                    shipping_zipcode=shipping_zipcode, 
+                                                    shipping_country=shipping_country)
+                shipping_address.save()          
+                return redirect('payment_info')
+            except:
+                messages.error(request, 'Failed to save shipping address. Please try again.')
+                return redirect('shipping_info')
+        else:   
+            return redirect('shipping_info')  
+    return render(request, 'checkout/shipping_info.html',{'already_info': already_info})
 
 def payment_info(request):
-    return render(request, 'checkout/payment_info.html')
+    username = request.session.get('username')
+    already_info = PaymentDetails.objects.filter(username=username)
+    if request.method == 'POST':
+        card_number = request.POST.get('card_number')
+        cardholder_name = request.POST.get('cardholder_name')
+        cvv = request.POST.get('cvv')
+        if card_number and cardholder_name and cvv:
+            try:
+                username = request.session['username']
+                if already_info:
+                    PaymentDetails.objects.filter(username=username).delete()
+                    messages.success(request, 'Payment details updated successfully!')
+                else:
+                    messages.success(request, 'Payment details saved successfully!')    
+                payment_details = PaymentDetails(username=username, 
+                                                card_number=card_number,
+                                                cardholder_name=cardholder_name, 
+                                                cvv=cvv)
+                payment_details.save()
+                confirm_order(request)
+                return redirect('confirm_order')
+            except:
+                messages.error(request, 'Failed to save payment details. Please try again.')
+                return redirect('payment_info')
+        else:   
+            return redirect('payment_info')
+    return render(request, 'checkout/payment_info.html',{'already_info': already_info})
 
 def confirm_order(request):
     if request.method == 'POST':

@@ -10,6 +10,8 @@ urlpatterns = [
     path('retrieve_all_history/', views.retrieve_all_history, name='retrieve_all_history'),
     path('retrieve_by_prod_history/', views.retrieve_by_prod_history, name='retrieve_by_prod_history'),
     path('retrieve_by_date_history/', views.retrieve_by_date_history, name='retrieve_by_date_history'),
+    path('change_customer_email/', views.change_customer_email, name='change_customer_email'),
+    path('change_customer_password/', views.change_customer_password, name='change_customer_password'),
 ]
 """path('admin_signup/', views.admin_signup, name='admin_signup'),
 path('admin_login/', views.admin_login, name='admin_login'),"""

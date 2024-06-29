@@ -18,6 +18,13 @@
                     <a class="nav-link" href="{% url 'customer_logout' %}">Logout</a>
                 </li>
                 <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" id="settingsDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Settings</a>
+                    <ul class="dropdown-menu" aria-labelledby="historyDropdown">
+                        <li><a class="dropdown-item" href="{%url 'change_customer_email'%}">Change Email</a></li>
+                        <li><a class="dropdown-item" href="{%url 'change_customer_password'%}">Change Password</a></li>
+                    </ul>
+                </li>
+                <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" id="historyDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">View History</a>
                     <ul class="dropdown-menu" aria-labelledby="historyDropdown">
                         <li><a class="dropdown-item" href="{%url 'retrieve_all_history'%}">View All History</a></li>

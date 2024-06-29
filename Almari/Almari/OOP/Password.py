@@ -38,8 +38,9 @@ class Password(metaclass=CommonMeta):
     def encrypt_password_login(plain_password,username,role):
         """Encrypts the password using the key read from the file."""
         key = Password.read_encryption_key(username,role)
+        if len(key[0]) != len(plain_password):
+            return None
         encrypted = plain_password
-        
         for iteration_increments in key:
             new_encrypted = ''
             for i, ch in enumerate(encrypted):

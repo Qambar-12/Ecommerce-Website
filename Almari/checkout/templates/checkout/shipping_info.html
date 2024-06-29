@@ -15,19 +15,24 @@
         <center>
             <div class="col-8">
                 <br/><br/>
-                <form method="POST" action="{% url 'payment_info' %}">
+                <form method="POST" action="{% url 'shipping_info' %}">
                     {% csrf_token %}
                     <div class="mb-3">
-                        <input type="text" class="form-control" name="shipping_full_name" placeholder="Full Name"
-                               value="{{ shipping_full_name|default_if_none:'' }}">
+                        {%if already_info%}
+                            <input type="text" class="form-control" name="shipping_full_name" placeholder="Full Name"
+                                value="{{ already_info.shipping_full_name|default_if_none:'' }}" required>
+                        {%else%}
+                            <input type="text" class="form-control" name="shipping_full_name" placeholder="Full Name"
+                                value="{{ shipping_full_name|default_if_none:'' }}" required>
+                        {%endif%}        
                     </div>
                     <div class="mb-3">
                         <input type="email" class="form-control" name="shipping_email" placeholder="Email"
-                               value="{{ shipping_email|default_if_none:'' }}">
+                               value="{{ shipping_email|default_if_none:'' }}"required>
                     </div>
                     <div class="mb-3">
                         <input type="text" class="form-control" name="shipping_address1" placeholder="Address Line 1"
-                               value="{{ shipping_address1|default_if_none:'' }}">
+                               value="{{ shipping_address1|default_if_none:'' }}"required>
                     </div>
                     <div class="mb-3">
                         <input type="text" class="form-control" name="shipping_address2" placeholder="Address Line 2 (Optional)"
@@ -35,7 +40,7 @@
                     </div>
                     <div class="mb-3">
                         <input type="text" class="form-control" name="shipping_city" placeholder="City"
-                               value="{{ shipping_city|default_if_none:'' }}">
+                               value="{{ shipping_city|default_if_none:'' }}"required>
                     </div>
                     <div class="mb-3">
                         <input type="text" class="form-control" name="shipping_state" placeholder="State (Optional)"
@@ -47,7 +52,7 @@
                     </div>
                     <div class="mb-3">
                         <input type="text" class="form-control" name="shipping_country" placeholder="Country"
-                               value="{{ shipping_country|default_if_none:'' }}">
+                               value="{{ shipping_country|default_if_none:'' }}"required>
                     </div>
                     <br/><br/>
                     <button type="submit" class="btn btn-secondary btn-success">Next</button>

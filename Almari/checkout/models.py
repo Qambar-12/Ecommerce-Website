@@ -6,7 +6,7 @@ class ShippingAddress(models.Model):
 	Represents a shipping address table in the e-commerce store database.
 	"""
 	#indirectly also related to customer table
-	user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
+	username = models.CharField(max_length=100,default="")
 	shipping_full_name = models.CharField(max_length=255)
 	shipping_email = models.CharField(max_length=255)
 	shipping_address1 = models.CharField(max_length=255)
@@ -24,7 +24,7 @@ class PaymentDetails(models.Model):
 	"""
 	Represents a payment details table in the e-commerce store database.
 	"""
-	user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
+	username = models.CharField(max_length=100,default="")
 	card_number = models.CharField(max_length=255)
 	cardholder_name = models.CharField(max_length=255)
 	cvv = models.CharField(max_length=255)

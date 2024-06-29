@@ -112,6 +112,46 @@ def customer_login(request):
         request.session['captcha'] = captcha_str
         form_data = request.session.get('form_data', {})
         return render(request, 'user/customer_login.html', {'form_data': form_data, 'captcha_image': captcha_image,'request': request})
+def change_customer_email(request):
+    if request.method == 'POST':
+        new_email = request.POST.get('new_email')
+        try:
+            username = request.session['username']
+            customer = CustomerUser(username, '', '', '', request=request)
+            error = customer.change_email(new_email)
+        except Exception as e:
+            messages.error(request,f"Something went wrong please try again {e}")
+            return redirect('storeHome')
+        else:
+            if error:
+                messages.error(request, error)
+                return render(request, 'user/change_email.html')
+            else:
+                messages.success(request, 'Email changed successfully')
+                return redirect('storeHome')
+    return render(request, 'user/change_email.html')
+def change_customer_password(request):
+    if request.method == 'POST':
+        previous_password = request.POST.get('previous_password')
+        new_password = request.POST.get('new_password')
+        confirm_new_password = request.POST.get('confirm_new_password')
+        try:
+            username = request.session['username']
+            customer = CustomerUser(username, '', '', '', request=request)
+            error = customer.change_password(previous_password, new_password, confirm_new_password)
+        except Exception as e:
+            messages.error(request,f"Something went wrong please try again {e}")
+            return redirect('storeHome')
+        else:
+            if error:
+                messages.error(request, error)
+                return render(request, 'user/change_password.html')
+            else:
+                messages.success(request, 'Password changed successfully')
+                return redirect('storeHome')
+    return render(request, 'user/change_password.html')
+
+
 def customer_logout(request):
     logout(request)
     messages.success(request, 'You have been logged out')
