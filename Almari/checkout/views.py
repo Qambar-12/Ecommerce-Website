@@ -1,5 +1,3 @@
-# views.py
-
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from .verification_email import send_verification_email
@@ -33,10 +31,11 @@ def shipping_info(request):
             zipcode=shipping_zipcode
         )
 
-        if validator.validate():
+        is_valid, message = validator.validate()
+        if is_valid:
             try:
                 if already_info:
-                    ShippingAddress.objects.filter(username=username).delete()
+                    already_info.delete()
                     messages.success(request, 'Shipping address updated successfully!')
                 else:
                     messages.success(request, 'Shipping address saved successfully!')
@@ -57,7 +56,7 @@ def shipping_info(request):
             except Exception as e:
                 messages.error(request, f'Failed to save shipping address. Error: {str(e)}')
         else:
-            messages.error(request, 'Invalid shipping information. Please check your inputs.')
+            messages.error(request, message)
             return render(request, 'checkout/shipping_info.html', {
                 'already_info': already_info,
                 'shipping_full_name': shipping_full_name,
@@ -74,19 +73,20 @@ def shipping_info(request):
 
 def payment_info(request):
     username = request.session.get('username')
-    already_info = PaymentDetails.objects.filter(username=username).first()
+    already_info = PaymentDetails.objects.filter(username=username)
 
     if request.method == 'POST':
         card_number = request.POST.get('card_number')
         cardholder_name = request.POST.get('cardholder_name')
         cvv = request.POST.get('cvv')
 
-        validator = PaymentValidator(card_number=card_number, cvv=cvv)
+        validator = PaymentValidator(card_number=card_number, cardholder_name=cardholder_name, cvv=cvv)
 
-        if validator.validate():
+        is_valid, message = validator.validate()
+        if is_valid:
             try:
                 if already_info:
-                    PaymentDetails.objects.filter(username=username).delete()
+                    already_info.delete()
                     messages.success(request, 'Payment details updated successfully!')
                 else:
                     messages.success(request, 'Payment details saved successfully!')
@@ -102,7 +102,7 @@ def payment_info(request):
             except Exception as e:
                 messages.error(request, f'Failed to save payment details. Error: {str(e)}')
         else:
-            messages.error(request, 'Invalid payment information. Please check your inputs.')
+            messages.error(request, message)
             return render(request, 'checkout/payment_info.html', {
                 'already_info': already_info,
                 'card_number': card_number,
@@ -111,6 +111,7 @@ def payment_info(request):
             })
 
     return render(request, 'checkout/payment_info.html', {'already_info': already_info})
+
 # Confirm order and verify_code functions remain the same
 
 def confirm_order(request):
