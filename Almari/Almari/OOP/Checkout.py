@@ -5,6 +5,7 @@ class ShippingValidator:
         self.email = email or ''
         self.zipcode = zipcode or ''
 
+
     def validate(self):
         if not re.match(r"^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]{2,}$", self.email):
             return False, "Invalid email address."
