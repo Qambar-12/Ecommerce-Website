@@ -1,31 +1,101 @@
-{%extends 'store/base.html'%}
-{%block content%}
+{% extends 'store/base.html' %}
+{% block content %}
 <!-- Header-->
 <header class="bg-dark py-5">
     <div class="container px-4 px-lg-5 my-5">
         <div class="text-center text-white">
-            <h1 class="display-4 fw-bolder">About Us....</h1>
+            <h1 class="display-4 fw-bolder">About Us</h1>
             <p class="lead fw-normal text-white-50 mb-0">Hamari Almari mai sab kuch hai</p>
         </div>
     </div>
 </header>
 
-<div class="container">
-    <div class="row">
-        <center>
-            <div class="col-8">
-                <br/><br/>
-<p align="justify">
-Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur sollicitudin erat ex, eu egestas ipsum malesuada eget. Morbi lobortis felis in nisl cursus, eget dapibus magna elementum. Duis quis erat massa. Proin sed mollis libero, eget venenatis justo. Suspendisse tincidunt est pretium, congue erat sit amet, fringilla nisl. In vitae nunc tristique, aliquam tortor sed, feugiat velit. Donec ut urna mi. Nam ultrices pharetra gravida. Maecenas nulla velit, eleifend eget iaculis vel, iaculis vel orci. Nam sed ex vitae nisi fermentum gravida. Ut aliquet turpis sem, ac consequat lorem iaculis non. Vestibulum nisl quam, efficitur vel ullamcorper id, consequat ac massa. Quisque iaculis sapien arcu, quis lobortis eros aliquet pharetra.
-<br/><br/>
-Sed non condimentum dolor. Vivamus euismod ullamcorper urna, eget malesuada nibh bibendum a. Cras tincidunt, mauris ut faucibus finibus, eros diam dapibus arcu, ut eleifend dui elit ut ligula. Donec in orci eu urna molestie tristique. Etiam efficitur ut orci ut imperdiet. Vestibulum venenatis nunc id congue convallis. Quisque sodales nulla augue, eget feugiat turpis iaculis vitae. Nunc non tellus tincidunt, hendrerit nunc sit amet, convallis tortor. Quisque et tempor diam. Vivamus aliquet id lorem in sodales. Nulla a consectetur ex, eget maximus neque. Suspendisse varius, lectus vel auctor vestibulum, diam lacus consectetur risus, vel gravida arcu enim eget lectus. Duis sodales pretium interdum.
-<br/><br/>
-Etiam gravida non orci eget vestibulum. Donec et tristique massa, at laoreet nisl. Sed lobortis est massa, a blandit nibh tincidunt eu. Nam at tortor egestas, suscipit justo blandit, ultrices nisl. Phasellus imperdiet placerat eros, sed fermentum mi scelerisque id. Duis dignissim leo eu orci sodales mattis. Suspendisse nisl velit, tristique eget ante nec, egestas scelerisque metus. In pellentesque odio purus, vitae scelerisque massa sodales sit amet. Ut ex augue, elementum sed luctus a, facilisis et dolor. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Etiam mauris sapien, malesuada id hendrerit sed, accumsan nec nunc. Fusce consectetur, metus ac suscipit varius, nulla ante scelerisque tellus, ut pretium dui velit at lectus. Suspendisse sem nunc, viverra tempus venenatis sit amet, mattis a nibh. Nulla pretium dictum ipsum, eget placerat urna semper id. 
-</p>
-<br/><br/>
+<style>
+    .friend-section {
+        border: 1px solid #ccc;
+        padding: 20px;
+        border-radius: 10px;
+        margin-bottom: 20px;
+    }
+    .friend-name {
+        margin-bottom: 10px;
+    }
+    .social-links a {
+        display: flex;
+        align-items: center;
+        margin-bottom: 8px;
+        font-size: 1.2em;
+        text-decoration: none;
+        color: #000;
+    }
+    .social-links img {
+        margin-right: 10px;
+    }
+</style>
+
+<div class="container my-5">
+    <!-- Friend 1 -->
+    <div class="row align-items-center my-5 friend-section">
+        <div class="col-md-4 text-center">
+            <img src="/static/assets/Qambar.jpeg" class="img-fluid rounded-circle mb-3" alt="Friend 1">
+        </div>
+        <div class="col-md-8 text-center text-md-left">
+            <h2 class="friend-name">Muhammad Qambar Hussain</h2>
+            <div class="d-flex flex-column align-items-center align-items-md-start social-links">
+                <a href="https://www.linkedin.com/in/muhammad-qambar-hussain-66095028a/" target="_blank" class="mb-2">
+                    <img src="/static/assets/linkedin.png" alt="Linkedin" width="32" height="32"> Linkedin
+                </a>
+                <a href="https://github.com/Qambar-12" target="_blank" class="mb-2">
+                    <img src="/static/assets/github.png" alt="Github" width="32" height="32"> Github
+                </a>
+                <a href="mailto:hussain4600920@cloud.neduet.edu.pk" target="_blank" class="mb-2">
+                    <img src="/static/assets/gmail.png" alt="Gmail" width="32" height="32"> Gmail
+                </a>
             </div>
-        </center>
+        </div>
+    </div>
+
+    <!-- Friend 2 -->
+    <div class="row align-items-center my-5 friend-section">
+        <div class="col-md-4 text-center">
+            <img src="/static/assets/Asad.jpeg" class="img-fluid rounded-circle mb-3" alt="Friend 2">
+        </div>
+        <div class="col-md-8 text-center text-md-left">
+            <h2 class="friend-name">Asad Ullah Nizami</h2>
+            <div class="d-flex flex-column align-items-center align-items-md-start social-links">
+                <a href="www.linkedin.com/in/asadullah-nizami-1708bb300" target="_blank" class="mb-2">
+                    <img src="/static/assets/linkedin.png" alt="LinkedIn" width="32" height="32"> LinkedIn
+                </a>
+                <a href="https://github.com/AsadUllahNizami" target="_blank" class="mb-2">
+                    <img src="/static/assets/github.png" alt="Github" width="32" height="32"> Github
+                </a>
+                <a href="mailto:nizami4602758@cloud.neduet.edu.pk" target="_blank" class="mb-2">
+                    <img src="/static/assets/gmail.png" alt="Gmail" width="32" height="32"> Gmail
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Friend 3 -->
+    <div class="row align-items-center my-5 friend-section">
+        <div class="col-md-4 text-center">
+            <img src="/static/assets/Aliraza.jpeg" class="img-fluid rounded-circle mb-3" alt="Friend 3">
+        </div>
+        <div class="col-md-8 text-center text-md-left">
+            <h2 class="friend-name">Ali Raza Baloch</h2>
+            <div class="d-flex flex-column align-items-center align-items-md-start social-links">
+                <a href="https://www.linkedin.com/in/aliraza-baloch-9a1a242b7?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app" target="_blank" class="mb-2">
+                    <img src="/static/assets/linkedin.png" alt="LinkedIn" width="32" height="32"> LinkedIn
+                </a>
+                <a href="https://github.com/Alirazabaloch" target="_blank" class="mb-2">
+                    <img src="/static/assets/github.png" alt="Github" width="32" height="32"> Github
+                </a>
+                <a href="mailto:Baloch4602320@cloud.neduet.edu.pk" target="_blank" class="mb-2">
+                    <img src="/static/assets/gmail.png" alt="Gmail" width="32" height="32"> Gmail
+                </a>
+            </div>
+        </div>
     </div>
 </div>
 
-{%endblock%}
+{% endblock %}

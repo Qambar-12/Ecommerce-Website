@@ -56,6 +56,8 @@ class CustomerUser(AbstractUser):
             if not self.username or not self.email or not self.password or not confirm or not self.address:
                 raise ValueError("All fields are required.")
             
+            if re.search(r'[\?:*"<>\|]', self.username):
+                raise ValueError("Username cannot contain special characters like ? : * \" < > |")
             if CustomerProfile.objects.filter(username=self.username).exists():
                 raise IntegrityError("Username already exists.\nPlease try another one.")
             

@@ -10,8 +10,10 @@ def storeHomepage(request):
     #list of Category objects created from the CategoryModel objects (database records)
     #how these objects are created is defined in the from_model method of the Category class.
     categories = [Category.from_model(category_model) for category_model in category_models]
+    product_models = ProductModel.objects.all()[:8]
+    products = [Product.from_model(product_model) for product_model in product_models]
 
-    return render(request, 'store/storeHome.html', {'categories': categories})
+    return render(request, 'store/storeHome.html', {'categories': categories, 'products': products})
 
 def about(request):
     return render(request, 'store/about.html')
