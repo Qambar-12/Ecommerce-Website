@@ -12,7 +12,7 @@ class ShippingValidator:
         self.zipcode = zipcode
 
     def validate_email(self):
-        email_regex = r'^[\w\.-]+@[\w\.-]+\.\w+$'
+        email_regex = r'^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$'
         return re.match(email_regex, self.email) is not None
 
     def validate_zipcode(self):

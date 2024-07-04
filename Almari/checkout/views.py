@@ -1,5 +1,3 @@
-# views.py
-
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from .verification_email import send_verification_email
@@ -81,7 +79,7 @@ def payment_info(request):
         cardholder_name = request.POST.get('cardholder_name')
         cvv = request.POST.get('cvv')
 
-        validator = PaymentValidator(card_number=card_number, cvv=cvv)
+        validator = PaymentValidator(card_number=card_number, cvv=cvv,cardholder_name=cardholder_name)
 
         if validator.validate():
             try:
