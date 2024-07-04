@@ -119,5 +119,5 @@ def clear_cart(request,show_message=True):
 
         return redirect('cart_summary')
         
-def save_cart(request):
-    pass    
+def render_shipping_info(request):
+    return render(request, 'checkout/shipping_info.html') 

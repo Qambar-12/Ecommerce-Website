@@ -23,11 +23,8 @@ def shipping_info(request):
         shipping_country = request.POST.get('shipping_country')
 
         validator = ShippingValidator(
-            full_name=shipping_full_name,
             email=shipping_email,
             address1=shipping_address1,
-            city=shipping_city,
-            country=shipping_country,
             zipcode=shipping_zipcode
         )
 
@@ -98,6 +95,7 @@ def payment_info(request):
                     cvv=cvv
                 )
                 payment_details.save()
+                confirm_order(request)
                 return redirect('confirm_order')
             except Exception as e:
                 messages.error(request, f'Failed to save payment details. Error: {str(e)}')

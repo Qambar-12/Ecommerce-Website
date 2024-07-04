@@ -64,7 +64,7 @@
             {% csrf_token %}
             <button class="btn btn-sm btn-danger" type="submit">Clear Cart</button>
         </form>
-        <form method="POST" action="{%url 'shipping_info' %}" class="d-inline">
+        <form method="POST" action="{%url 'render_shipping_info' %}" class="d-inline">
             {% csrf_token %}
             <button class="btn btn-sm btn-success" type="submit">Checkout</button>
         </form>
