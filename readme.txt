@@ -1,4 +1,4 @@
-# Ecommerce Website
+# Ecommerce Website (Almari)
 
 This is an ecommerce website built with Django. This README file provides instructions on setting up the project on your local machine for development and testing purposes.
 
