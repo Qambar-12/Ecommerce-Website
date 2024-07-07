@@ -71,6 +71,11 @@ Here are some pre-created accounts for testing purposes:
 ### Administrator Account
     - *Username*: drmaria
     - *Password*: bateinNaKarein*
+    
+    - *Username*: qambar125
+    - *Password*: otiskhan
+                      ↓
+            best football player ever
 
 ### Customer Accounts
 Create customer account by signing up on our website make sure to use a valid "Email" so that you can receive a verification code to confirm order
