@@ -2,6 +2,16 @@ from user.models import CustomerHistory
 from store.models import Product as ProductModel 
 import datetime
 class Cart:
+    """This class is used to manage the cart functionality:
+    1. Add products to the cart.
+    2. Remove products from the cart.
+    3. Update products in the cart.
+    4. Clear the cart.
+    5. Load the cart.
+    6. Save the cart to the history.
+    7. Get the total price of the products in the cart.
+    8. Get the number of unique products in the cart. (operator overloading __len__)
+    """
     def __init__(self, request):
         # list of dictionaries used to store the products in the cart
         self.session = request.session

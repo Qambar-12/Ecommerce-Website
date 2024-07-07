@@ -6,8 +6,10 @@
     <div class="container px-4 px-lg-5 my-5">
         <div class="text-center text-white">
             <h1 class="display-4 fw-bolder">Confirm Order</h1>
-            <p class="lead fw-normal text-white-50 mb-0">Please enter verification code sent to you on email</details>...</p>
-            <p class="lead fw-normal text-white-50 mb-0">If code is not received please try again or change your email from settings</p>
+            <p class="lead fw-normal text-white-50 mb-0">Please enter verification code sent to you on email</details>
+                ...</p>
+            <p class="lead fw-normal text-white-50 mb-0">If code is not received please try again or change your email
+                from settings</p>
         </div>
     </div>
 </header>
@@ -15,18 +17,18 @@
     <div class="row">
         <center>
             <div class="col-8">
-                <br/><br/>
+                <br /><br />
                 <form method="POST" action="{% url 'verify_code' %}">
                     {% csrf_token %}
                     <div class="mb-3">
-                        <input type="text" class="form-control" name="verification_code" placeholder="Verification Code" 
-                               value="{{ verification_code|default_if_none:'' }}" required>
+                        <input type="text" class="form-control" name="verification_code" placeholder="Verification Code"
+                            value="{{ verification_code|default_if_none:'' }}" required>
                     </div>
-                    <br/><br/>
+                    <br /><br />
                     <button type="submit" class="btn btn-secondary btn-success">Confirm Order</button>
                 </form>
-                <br/><br/><br/><br/><br/><br/><br/><br/>
+                <br /><br /><br /><br /><br /><br /><br /><br />
             </div>
         </center>
     </div>
-{% endblock %}    
+    {% endblock %}

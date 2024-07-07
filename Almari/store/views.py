@@ -6,6 +6,7 @@ from Almari.OOP.Cart import Cart
 from user.views import CustomerUser
 
 def storeHomepage(request):
+    """This function is used to render the homepage of the store. It fetches the categories and products from the database and passes them to the template."""
     category_models = CategoryModel.objects.all()
     #list of Category objects created from the CategoryModel objects (database records)
     #how these objects are created is defined in the from_model method of the Category class.
@@ -16,9 +17,11 @@ def storeHomepage(request):
     return render(request, 'store/storeHome.html', {'categories': categories, 'products': products})
 
 def about(request):
+    """This function is used to render the about page of the store. """
     return render(request, 'store/about.html')
 
 def category_detail(request, category_id):
+    """This function is used to render the page for a specific category. It fetches the category and its products from the database and passes them to the template. It also handles sorting of products based on price."""
     category_model = get_object_or_404(CategoryModel, id=category_id)
     category = Category.from_model(category_model)
     category.load_products()
@@ -32,6 +35,7 @@ def category_detail(request, category_id):
     return render(request, 'store/category_detail.html', {'category': category, 'products': category.products,'sort_option':sort_option})
 
 def product_detail(request, product_id):
+    """This function is used to render the page for a specific product. It fetches the product and its related products from the database and passes them to the template. It also calculates the available quantity of the product based on the quantity in the cart."""
     product_model = get_object_or_404(ProductModel, id=product_id)
     product = Product.from_model(product_model)
     related_products = product.get_related_products()
@@ -48,6 +52,7 @@ def product_detail(request, product_id):
     else:
         return render(request, 'store/product_detail.html', {'product': product, 'related_products': related_products})
 def search(request):
+    """This function is used to handle the search functionality. It fetches the search query from the request and returns the search results based on the query."""
     query = request.GET.get('q')
     category_models = CategoryModel.objects.all()
     categories = [Category.from_model(category_model) for category_model in category_models]

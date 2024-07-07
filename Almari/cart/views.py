@@ -11,6 +11,7 @@ from user.views import CustomerUser
 
 # Create your views here.
 def cart_summary(request):
+    """This view is used to render the cart summary page that displays the products in the cart and the total price of the products in the cart."""
     if request.method == 'GET':
         if 'logged_in' not in request.session:
             messages.error(request, 'You must be logged in or sign up first.')
@@ -30,6 +31,7 @@ def cart_summary(request):
                 return render(request, 'cart/cart_summary.html', {'cart': cart, 'total': total})
 def add_to_cart(request, product_id):
     if request.method == 'POST':
+        """"This view is used to add products to the cart of the logged in customer."""
         if 'logged_in' not in request.session:
             messages.error(request, 'You must be logged in or sign up first.')
             return redirect('product_detail', product_id=product_id)
@@ -56,6 +58,7 @@ def add_to_cart(request, product_id):
                 messages.error(request, str(e))
 
 def remove_from_cart(request, product_id):
+    """This view is used to remove products from the cart of the logged in customer."""
     if request.method == 'POST':
         product_model = get_object_or_404(ProductModel, pk=product_id)
         product = Product.from_model(product_model)
@@ -78,6 +81,7 @@ def remove_from_cart(request, product_id):
         return redirect('cart_summary')
 
 def update_cart(request, product_id):
+    """This view is used to update the quantity of products in the cart of the logged in customer."""
     if request.method == 'POST':
         product_model = get_object_or_404(ProductModel, pk=product_id)
         product = Product.from_model(product_model)
@@ -107,6 +111,7 @@ def update_cart(request, product_id):
         return redirect('cart_summary')
 
 def clear_cart(request,show_message=True):
+    """This view is used to clear the cart of the logged in customer."""
     if request.method == 'POST':
         try:
             username = request.session['username']
@@ -120,4 +125,5 @@ def clear_cart(request,show_message=True):
         return redirect('cart_summary')
         
 def render_shipping_info(request):
+    """This view is used to render the shipping information page."""
     return render(request, 'checkout/shipping_info.html') 

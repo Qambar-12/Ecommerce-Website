@@ -2,6 +2,10 @@ from store.models import Category as CategoryModel, Product as ProductModel
 from django.db.models import Q
 
 class Product:
+    """This class is used to create product objects with the functionality :
+    1. Search for products.
+    2. Get related products.
+    3. Fetch products from the database."""
     def __init__(self, name, price, stock_quantity, description, image_url, category=None):
         self.name = name
         self.price = price

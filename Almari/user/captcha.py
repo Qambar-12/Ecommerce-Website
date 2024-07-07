@@ -5,6 +5,7 @@ from PIL import Image, ImageDraw, ImageFont, ImageFilter
 import base64
 
 def generate_image_captcha():
+    """Generate a random image captcha and return the image and the text of the captcha."""
     # Generate a random string of 6 characters (letters and digits)
     captcha_text = ''.join(random.choices(string.ascii_letters + string.digits, k=6))
 

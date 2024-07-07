@@ -9,6 +9,8 @@ from Almari.OOP.Checkout import ShippingValidator, PaymentValidator
 import random, time
 
 def shipping_info(request):
+    """This function is used to save the shipping address of the user. It also validates the shipping address using the ShippingValidator class.
+    If the shipping address is valid, it is saved in the database. If the user already has a shipping address, it is updated. Otherwise, a new shipping address is saved."""
     username = request.session.get('username')
     already_info = ShippingAddress.objects.filter(username=username)
     
@@ -69,6 +71,8 @@ def shipping_info(request):
     return render(request, 'checkout/shipping_info.html', {'already_info': already_info})
 
 def payment_info(request):
+    """This function is used to save the payment details of the user. It also validates the payment details using the PaymentValidator class.
+    If the payment details are valid, they are saved in the database. If the user already has payment details, they are updated. Otherwise, new payment details are saved."""
     username = request.session.get('username')
     already_info = PaymentDetails.objects.filter(username=username)
 
@@ -110,9 +114,9 @@ def payment_info(request):
 
     return render(request, 'checkout/payment_info.html', {'already_info': already_info})
 
-# Confirm order and verify_code functions remain the same
 
 def confirm_order(request):
+    """This function is used to confirm the order. It sends a verification email to the user with a verification code by calling the send_verification_email function."""
     if request.method == 'POST':
         try:
             customer_user = CustomerProfile.objects.get(username=request.session['username'])
@@ -136,6 +140,7 @@ def confirm_order(request):
     return render(request, 'checkout/confirm_order.html')
 
 def verify_code(request):
+    """This function is used to verify the verification code entered by the user. If the code is correct within time, the order is placed successfully and the cart is cleared. """
     if request.method == 'POST':
         user_code = request.POST.get('verification_code')
         verification_code = request.session.get('verification_code')

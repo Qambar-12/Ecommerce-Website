@@ -1,5 +1,6 @@
 from django.urls import path
 from . import views
+#these urls route to the views in the user app
 urlpatterns = [
 	path('customer_logout/', views.customer_logout, name='customer_logout'),
 	path('customer_login/', views.customer_login, name='customer_login'),

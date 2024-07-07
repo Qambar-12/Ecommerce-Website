@@ -12,7 +12,16 @@ from Almari.OOP.Cart import Cart
 from Almari.OOP.History import History
 #Abstract class for user and its subclasses CustomerUser and AdminUser to implement abstract methods login and signup.
 #Inheritance feature used
+#uisng metaclass to create a common meta class for all classes that AbstractUser inherits from in the OOP module
 class AbstractUser(Password, ABC ,metaclass=CommonMeta):
+    """This class is used as an abstract class for user classes to provide user related functionality :
+        1.Login
+        2.Signup
+        3.Change email
+        4.Change password
+        5.Password hashing
+        6.Password checking
+    """
     def __init__(self, username, email, password):
         self.username = username
         self.email = email
@@ -42,15 +51,19 @@ class AbstractUser(Password, ABC ,metaclass=CommonMeta):
         return check_password(password, self.password)
 
 class CustomerUser(AbstractUser):
+    """This class is used as a concrete class for customer users to provide customer related functionality and inherit from AbstractUser class"""
     #class variable to keep track of whether the customer is logged in or not
     logged_in = False
     def __init__(self, username, email, password, address,request = None):
+        """Constructor to initialize the instance attributes of the class CustomerUser 
+            and also to initialize the composite classes Cart and History"""
         super().__init__(username, email, password)
         self.address = address
         self.request = request
         self.cart = Cart(request)              #composition feature used (everytime cart's constructor runs , it assigns the instance attributes session value of request.session and so that it can check if the cart is already present in the session or not and if not it creates a new cart for the user)
         self.history = History(request)        #composition feature used (user owns the history object)
     def validate_signup(self,confirm):
+        """Method to validate the signup form fields and check if the username already exists or not (called by signup method)"""
         #try except block to handle possible exceptions
         try:
             if not self.username or not self.email or not self.password or not confirm or not self.address:
@@ -76,6 +89,7 @@ class CustomerUser(AbstractUser):
         return None    
 
     def signup(self,confirm):
+        """Method to signup the customer and create a new user and customer profile in the database by calling the validate_signup method and encrypting the password before hashing it (security feature)"""
         error = self.validate_signup(confirm)
         if error:
             return error
@@ -92,6 +106,7 @@ class CustomerUser(AbstractUser):
         return None
     
     def validate_login(self):
+        """Method to validate the login form fields and check if the username exists or not (called by login method)"""
         if  self.username and  self.password:
             return None
         elif not self.username and not self.password:
@@ -103,6 +118,7 @@ class CustomerUser(AbstractUser):
             
 
     def login(self, username, password):
+        """Method to login the customer and check if the username exists and is created by django admin or not and then check the password by calling relevant methods (encrypt_password_login and check_password) from mixin Password class."""
         error = self.validate_login()
         if error:
             return None,error
@@ -133,12 +149,14 @@ class CustomerUser(AbstractUser):
                 return None, "Username does not exist."
 
     def change_email(self, new_email):
+        """Method to change the email of the customer and update it in the database """
         if not re.search(r'^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$', new_email):
             return "Invalid email address."
         User.objects.filter(username=self.username).update(email=new_email)
         CustomerProfile.objects.filter(username=self.username).update(email=new_email)
         return None
     def change_password(self, previous_password,new_password,confirm_password):
+        """Method to change the password of the customer and update it in the database after checking if the previous password is correct and the new passwords match or not"""
         if not previous_password or not new_password or not confirm_password:
             return "All fields are required to update password."
         try:

@@ -12,9 +12,10 @@
 </header>
 <!-- Search form -->
 <div class="d-flex justify-content-center mt-4">
-    <form class="form-group"  method="POST">
+    <form class="form-group" method="POST">
         {% csrf_token %}
-        <input class="form-control mb-2" style="width: 300px;" type="email" placeholder="New Email" aria-label="Search" name="new_email">
+        <input class="form-control mb-2" style="width: 300px;" type="email" placeholder="New Email" aria-label="Search"
+            name="new_email">
         <button class="btn btn-outline-dark d-block mx-auto" type="submit">Update</button>
     </form>
 </div>

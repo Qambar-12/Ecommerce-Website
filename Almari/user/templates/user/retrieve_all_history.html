@@ -17,41 +17,41 @@
         <p>No history found...!</p>
     </div>
     {% else %}
-        {% for record in history %}
-            <h3>Order Date: {{ record.date }}</h3>
-            <table class="table">
-                <thead>
-                    <tr>
-                        <th class="text-center">Product Image</th>
-                        <th>Product Name</th>
-                        <th class="text-center">Quantity</th>
-                        <th class="text-end">Unit Price</th>
-                        <th class="text-end">Subtotal</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for product_id, product_info in record.cart.items %}
-                    <tr>
-                        <td class="text-center">
-                            <img src="{{ product_info.4 }}" alt="{{ product_info.3 }}" class="img-fluid"
-                                style="max-width: 100px; height: auto;">
-                        </td>
-                        <td>{{ product_info.3 }}</td>
-                        <td class="text-center">
-                            <input class="form-control text-center d-inline-block quantity-input" name="quantity" type="number"
-                                value="{{ product_info.0 }}" min="1" max="{{ product_info.0 }}" readonly>
-                        </td>
-                        <td class="text-end">${{ product_info.1|floatformat:2 }}</td>
-                        <td class="text-end">${{ product_info.2|floatformat:2 }}</td>
-                    </tr>
-                    {% endfor %}
-                    <tr>
-                        <td colspan="4" class="text-end"><strong>Total</strong></td>
-                        <td class="text-end"><strong>${{ record.total|floatformat:2 }}</strong></td>
-                    </tr>
-                </tbody>
-            </table>
-        {% endfor %}
+    {% for record in history %}
+    <h3>Order Date: {{ record.date }}</h3>
+    <table class="table">
+        <thead>
+            <tr>
+                <th class="text-center">Product Image</th>
+                <th>Product Name</th>
+                <th class="text-center">Quantity</th>
+                <th class="text-end">Unit Price</th>
+                <th class="text-end">Subtotal</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for product_id, product_info in record.cart.items %}
+            <tr>
+                <td class="text-center">
+                    <img src="{{ product_info.4 }}" alt="{{ product_info.3 }}" class="img-fluid"
+                        style="max-width: 100px; height: auto;">
+                </td>
+                <td>{{ product_info.3 }}</td>
+                <td class="text-center">
+                    <input class="form-control text-center d-inline-block quantity-input" name="quantity" type="number"
+                        value="{{ product_info.0 }}" min="1" max="{{ product_info.0 }}" readonly>
+                </td>
+                <td class="text-end">${{ product_info.1|floatformat:2 }}</td>
+                <td class="text-end">${{ product_info.2|floatformat:2 }}</td>
+            </tr>
+            {% endfor %}
+            <tr>
+                <td colspan="4" class="text-end"><strong>Total</strong></td>
+                <td class="text-end"><strong>${{ record.total|floatformat:2 }}</strong></td>
+            </tr>
+        </tbody>
+    </table>
+    {% endfor %}
     {% endif %}
 </div>
 {% endblock %}

@@ -2,6 +2,10 @@ from user.models import CustomerHistory
 from django.forms.models import model_to_dict
 from decimal import Decimal
 class History:
+    """This class is used to retrieve the history of the user's purchases from the database and display it in the user's profile:
+        1.Retrieve all history.
+        2.Retrieve history by product.
+        3.Retrieve history by date."""
     def __init__(self,request):
         self.session = request.session
         self.request = request

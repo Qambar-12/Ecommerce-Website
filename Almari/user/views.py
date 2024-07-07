@@ -9,6 +9,7 @@ import ast
 # Create your views here.
 #Posting the data from the form to the server and saving it in the database if data is valid.
 def customer_signup(request):
+    """This function is used to handle the customer signup form submission. It validates the form data and creates a new customer user if the data is valid."""
     if request.method == 'POST':
         username = request.POST['username']
         email = request.POST['email']
@@ -70,6 +71,7 @@ def customer_signup(request):
         return render(request, 'user/customer_signup.html', {'form_data': form_data, 'captcha_image': captcha_image,'request': request})
 
 def customer_login(request):
+    """This function is used to handle the customer login form submission. It validates the form data and logs in the customer if the data is valid."""
     if request.method == 'POST':
         username = request.POST['username']
         password = request.POST['password']
@@ -113,6 +115,7 @@ def customer_login(request):
         form_data = request.session.get('form_data', {})
         return render(request, 'user/customer_login.html', {'form_data': form_data, 'captcha_image': captcha_image,'request': request})
 def change_customer_email(request):
+    """This function is used to handle the customer email change form submission. It validates the form data and changes the email of the customer if the data is valid."""
     if request.method == 'POST':
         new_email = request.POST.get('new_email')
         try:
@@ -131,6 +134,7 @@ def change_customer_email(request):
                 return redirect('storeHome')
     return render(request, 'user/change_email.html')
 def change_customer_password(request):
+    """This function is used to handle the customer password change form submission. It validates the form data and changes the password of the customer if the data is valid."""
     if request.method == 'POST':
         previous_password = request.POST.get('previous_password')
         new_password = request.POST.get('new_password')
@@ -153,6 +157,7 @@ def change_customer_password(request):
 
 
 def customer_logout(request):
+    """This function is used to log out the customer."""
     logout(request)
     messages.success(request, 'You have been logged out')
     return redirect('storeHome')
@@ -165,6 +170,7 @@ def seller_login(request):
     return render(request, 'user/seller_login.html')
 
 def retrieve_all_history(request):
+    """This function is used to retrieve all the purchase history of the customer."""
     if request.method == 'GET':
         try :
             username = request.session['username']
@@ -182,6 +188,7 @@ def retrieve_all_history(request):
             else:
                 return render(request, 'user/retrieve_all_history.html', {'history': None})
 def retrieve_by_prod_history(request):
+    """This function is used to retrieve the purchase history of the customer by product."""
     if request.method == 'POST':
         prod = request.POST.get('prod')
         try:
@@ -206,6 +213,7 @@ def retrieve_by_prod_history(request):
     return render(request, 'user/retrieve_by_prod_history.html')
 
 def retrieve_by_date_history(request):
+    """This function is used to retrieve the purchase history of the customer by date."""
     if request.method == 'POST':
         date = request.POST.get('date')
         try:
